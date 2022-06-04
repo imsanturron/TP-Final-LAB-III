@@ -17,7 +17,7 @@ public class Main {
                 "dsadff", "eafef3", "fefef");
 
         PlanDeControl planDeControl = new PlanDeControl("gripe", 6);
-        planDeControl.agregarTareas();
+        planDeControl.agregarTareasPROADM();
         planDeControl.verTareas();
     }
 }

@@ -22,6 +22,16 @@ public class Paciente extends Usuario {
         this.enfermedad = enfermedad;
     }
 
+    public void verTareasAHacer(){
+        planDeControl.verTareas();
+    }
+    public void completarTareasAHacer(){
+        planDeControl.completarAcciones();
+    }
+
+    public void modificarTareasAHacer(){
+        planDeControl.modificarAcciones();
+    }
     public UUID getMatriculaMedico(){
         return profesionalPropio.getMatricula();
     }
@@ -34,5 +44,11 @@ public class Paciente extends Usuario {
         return enfermedad;
     }
 
+    public String getDNI(){
+        return DNI;
+    }
 
+    public void setPlanDeControl(PlanDeControl planDeControl) {
+        this.planDeControl = planDeControl;
+    }
 }

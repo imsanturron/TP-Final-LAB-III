@@ -8,11 +8,15 @@ public class RNumerica extends Realizar{
         super(accion, msjEspecifico);
     }
 
-    public int ingresarNum(){
+    public void ingresarNum(){
         System.out.println("ingrese el dato: ");
         dato = scan.nextInt();
         scan.nextLine();
         scan.close();
+        hecho = true;
+    }
+
+    public int getDato() {
         return dato;
     }
 }
