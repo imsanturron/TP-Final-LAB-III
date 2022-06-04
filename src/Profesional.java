@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.*;
 
 public class Profesional extends Usuario {
@@ -57,6 +58,7 @@ public class Profesional extends Usuario {
                 case 1:
                     while (i < planes.size()) {
                         if (planes.get(i).getEnfermedad().equalsIgnoreCase(listaConver.get(0).getEnfermedad())) {
+                            System.out.println("dias:"+planes.get(i).getDias());
                             planes.get(i).verTareas();
                             break;
                         }
@@ -67,6 +69,8 @@ public class Profesional extends Usuario {
                         s_n = scan.next().charAt(0);
                         if (s_n == 's' || s_n == 'S') {
                             pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(planes.get(i));
+                            pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
+                            pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(planes.get(i).getDias()));
                             pacientesAAtender.remove(listaConver.get(0));
                             listaConver.remove(0);
                         }
@@ -76,6 +80,7 @@ public class Profesional extends Usuario {
                 case 2:
                     while (i < planes.size()) {
                         if (planes.get(i).getEnfermedad().equalsIgnoreCase(listaConver.get(0).getEnfermedad())) {
+                            System.out.println("dias:"+planes.get(i).getDias());
                             planes.get(i).verTareas();
                             break;
                         }
@@ -89,6 +94,8 @@ public class Profesional extends Usuario {
                             dias = scan.nextInt();
                             scan.nextLine();
                             pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(planes.get(i).ModificarTareasYAsignarAuxPROADM(dias));
+                            pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
+                            pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(dias));
                             pacientesAAtender.remove(listaConver.get(0));
                             listaConver.remove(0);
                             System.out.println("plan satisfactoriamente asignado.");
@@ -102,6 +109,8 @@ public class Profesional extends Usuario {
                     PlanDeControl plan = new PlanDeControl(listaConver.get(0).getEnfermedad(), dias);
                     plan.agregarTareasPROADM();
                     pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(plan);
+                    pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
+                    pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(dias));
                     pacientesAAtender.remove(listaConver.get(0));
                     listaConver.remove(0);
                     ///sugerir predet a admin

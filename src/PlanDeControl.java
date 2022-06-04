@@ -152,4 +152,8 @@ public class PlanDeControl {
     public ArrayList<Realizar> getArrayTareas() {
         return tareas;
     }
+
+    public int getDias() {
+        return dias;
+    }
 }

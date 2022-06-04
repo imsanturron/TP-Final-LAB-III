@@ -16,6 +16,10 @@ public class Realizar {
         return accion;
     }
 
+    public void setHecho(boolean hecho) {
+        this.hecho = hecho;
+    }
+
     @Override
     public String toString() {
         return "Realizar{" +

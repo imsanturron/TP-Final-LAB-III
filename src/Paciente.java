@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class Paciente extends Usuario {
@@ -12,6 +13,8 @@ public class Paciente extends Usuario {
     private boolean atendido = false;
     private String enfermedad;
     private PlanDeControl planDeControl;
+    private LocalDate fIni;
+    private LocalDate fFin;
     /// HistorialMedico
 
 
@@ -50,5 +53,21 @@ public class Paciente extends Usuario {
 
     public void setPlanDeControl(PlanDeControl planDeControl) {
         this.planDeControl = planDeControl;
+    }
+
+    public LocalDate getfIni() {
+        return fIni;
+    }
+
+    public void setfIni(LocalDate fIni) {
+        this.fIni = fIni;
+    }
+
+    public LocalDate getfFin() {
+        return fFin;
+    }
+
+    public void setfFin(LocalDate fFin) {
+        this.fFin = fFin;
     }
 }
