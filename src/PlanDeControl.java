@@ -17,12 +17,15 @@ public class PlanDeControl {
         String accion, especificaciones;
 
         while (opcion != 0) {
-            System.out.println("Que desea agregar?\n  1:Tarea de entrada numerica    ---    2:Tarea de entrada de texto    ");
-            System.out.println("---    3:Tarea de entrada 'si/no'    ---    2:Tarea de entrada tipo multiple choice");
+            System.out.println("Que desea agregar?\n  1:Tarea de entrada numerica    ---    2:Tarea de entrada 'si/no'    ");
+            System.out.println("  3:Tarea de entrada de texto    ---    4:Tarea de entrada tipo multiple choice    ---    0:Salir");
             opcion = scan.nextInt();
             scan.nextLine();
 
             switch (opcion) {
+                case 0:
+                    System.out.println("saliendo...");
+                    break;
                 case 1:
                     System.out.println("(NUMERICA)\naccion a realizar: ");
                     accion = scan.nextLine();
@@ -143,6 +146,38 @@ public class PlanDeControl {
             System.out.println("desea seguir modificando? 'si' si desea seguir");
             seguir = scan.nextLine();
         }
+    }
+
+    public boolean resetDia() {
+        int i = 0, alerta=0;
+
+        while (i < tareas.size()) {
+            if(tareas.get(i).isHecho() == false)
+                alerta=1;
+
+            if (tareas.get(i) instanceof RNumerica) {
+                tareas.get(i).setHecho(false);
+                ((RNumerica) tareas.get(i)).setDato(-9999);
+            }
+            if (tareas.get(i) instanceof RTexto) {
+                tareas.get(i).setHecho(false);
+                ((RTexto) tareas.get(i)).setDato("");
+            }
+            if (tareas.get(i) instanceof RBooleana) {
+                tareas.get(i).setHecho(false);
+                ((RBooleana) tareas.get(i)).setDato(false);
+            }
+            if (tareas.get(i) instanceof RMulChoice) {
+                tareas.get(i).setHecho(false);
+                ((RMulChoice) tareas.get(i)).setDatOpcion("sin ingresar");
+            }
+        }
+        if(alerta==1) {
+            System.out.println("No ingresaste todas tus actividades del dia de ayer. Intenta" +
+                    "realizar tus actividades correspondientes por favor.");
+            return true;
+        }
+        return false;
     }
 
     public String getEnfermedad() {

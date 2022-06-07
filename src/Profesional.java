@@ -13,11 +13,19 @@ public class Profesional extends Usuario {
     private UUID matricula;
     Scanner scan = new Scanner(System.in);
     HashSet<Paciente> pacientesAAtender = new HashSet<>();
+    ArrayList<Paciente> pacientesACargo = new ArrayList<>(); ///es buena para persistencia? o mejor hashmap de todos?
 
     public Profesional(String nombreCompleto, TipoUsuario tipoUsuario, String DNI,
                        String contrasena, String telefono, String edad) {
         super(nombreCompleto, tipoUsuario, DNI, contrasena, telefono, edad);
         matricula = UUID.randomUUID();
+    }
+
+    public void infoAyerTareasPacientes() {
+        for (Paciente x : pacientesACargo) {
+            if(x.isAlertaDeNoRealizacion())
+                System.out.println(x.getNombre()+" (dni:"+x.getDNI()+") no cumplio con todas las tareas de ayer");
+        }
     }
 
     public void verNuevosPacientes(HashMap<String, Paciente> pacientes, ArrayList<PlanDeControl> planes) {
@@ -58,7 +66,7 @@ public class Profesional extends Usuario {
                 case 1:
                     while (i < planes.size()) {
                         if (planes.get(i).getEnfermedad().equalsIgnoreCase(listaConver.get(0).getEnfermedad())) {
-                            System.out.println("dias:"+planes.get(i).getDias());
+                            System.out.println("dias:" + planes.get(i).getDias());
                             planes.get(i).verTareas();
                             break;
                         }
@@ -80,7 +88,7 @@ public class Profesional extends Usuario {
                 case 2:
                     while (i < planes.size()) {
                         if (planes.get(i).getEnfermedad().equalsIgnoreCase(listaConver.get(0).getEnfermedad())) {
-                            System.out.println("dias:"+planes.get(i).getDias());
+                            System.out.println("dias:" + planes.get(i).getDias());
                             planes.get(i).verTareas();
                             break;
                         }
@@ -131,6 +139,5 @@ public class Profesional extends Usuario {
     public String getEdad() {
         return edad;
     }
-
 
 }

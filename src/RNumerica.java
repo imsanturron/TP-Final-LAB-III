@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class RNumerica extends Realizar{
-    private int dato;
+    private int dato = -9999;
     private Scanner scan = new Scanner(System.in);
 
     public RNumerica(String accion, String msjEspecifico) {
@@ -18,5 +18,9 @@ public class RNumerica extends Realizar{
 
     public int getDato() {
         return dato;
+    }
+
+    public void setDato(int dato) {
+        this.dato = dato;
     }
 }

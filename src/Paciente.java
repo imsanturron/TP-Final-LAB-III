@@ -15,6 +15,7 @@ public class Paciente extends Usuario {
     private PlanDeControl planDeControl;
     private LocalDate fIni;
     private LocalDate fFin;
+    private boolean alertaDeNoRealizacion = false;
     /// HistorialMedico
 
 
@@ -25,17 +26,24 @@ public class Paciente extends Usuario {
         this.enfermedad = enfermedad;
     }
 
-    public void verTareasAHacer(){
+    public void resetDatosDiaYAlertar() {
+        alertaDeNoRealizacion = planDeControl.resetDia();
+    }
+
+
+    public void verTareasAHacer() {
         planDeControl.verTareas();
     }
-    public void completarTareasAHacer(){
+
+    public void completarTareasAHacer() {
         planDeControl.completarAcciones();
     }
 
-    public void modificarTareasAHacer(){
+    public void modificarTareasAHacer() {
         planDeControl.modificarAcciones();
     }
-    public UUID getMatriculaMedico(){
+
+    public UUID getMatriculaMedico() {
         return profesionalPropio.getMatricula();
     }
 
@@ -47,7 +55,7 @@ public class Paciente extends Usuario {
         return enfermedad;
     }
 
-    public String getDNI(){
+    public String getDNI() {
         return DNI;
     }
 
@@ -69,5 +77,13 @@ public class Paciente extends Usuario {
 
     public void setfFin(LocalDate fFin) {
         this.fFin = fFin;
+    }
+
+    public boolean isAlertaDeNoRealizacion() {
+        return alertaDeNoRealizacion;
+    }
+
+    public String getNombre(){
+        return nombreCompleto;
     }
 }

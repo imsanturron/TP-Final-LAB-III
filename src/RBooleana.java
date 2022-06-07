@@ -22,4 +22,8 @@ public class RBooleana extends Realizar {
     public boolean isDato() {
         return dato;
     }
+
+    public void setDato(boolean dato) {
+        this.dato = dato;
+    }
 }
