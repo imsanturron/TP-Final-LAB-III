@@ -38,15 +38,6 @@ public class Tarea {
         return sinopsis;
     }
 
-    public void TareaDelDia(){
-
-        Scanner sc = new Scanner(System.in);
-        System.out.println(this.AccionDelDia);
-        System.out.println(this.sinopsis);
-        this.rta = sc.nextLine();
-
-    }
-
     @Override
     public String toString() {
         return "Tarea{" +

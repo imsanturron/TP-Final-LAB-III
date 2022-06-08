@@ -40,6 +40,9 @@ public class Paciente extends Usuario {
         this.planDeControl = planDeControl;
     }
 
+    public PlanDeControl getPlanDeControl() {
+        return planDeControl;
+    }
 
     @Override
     public boolean equals(Object o) {

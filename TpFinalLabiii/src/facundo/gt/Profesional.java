@@ -3,10 +3,13 @@ package facundo.gt;
 import java.time.LocalDate;
 import java.util.*;
 
+import static facundo.gt.Sistema.sc;
+
 public class Profesional extends Usuario {
 
     private UUID matricula;
     Scanner scan = new Scanner(System.in);
+    private PlanDeControl p;
     HashSet<Paciente> pacientesPorAtender = new HashSet<>();
 
     public Profesional(String nombreCompleto, TipoUsuario tipoUsuario, String DNI,
@@ -31,6 +34,32 @@ public class Profesional extends Usuario {
     public String getEdad() {
         return edad;
     }
+
+    public String SeleccionDePacientePorAtender(){
+        String dni;
+        System.out.println("digite el dni del paciente al cual se le aplicar el plan de control");
+        for (Paciente pacientex :pacientesPorAtender) {
+            System.out.println(pacientex.toString());
+        }
+        dni = sc.nextLine();
+        return dni;
+    }
+    public Paciente BuscarPacientePorDni(String dni){
+        Paciente p = null;
+        for (Paciente pacientex : pacientesPorAtender) {
+            if(pacientex.equals(dni)){
+                p = pacientex;
+                break;
+            }
+        }
+        return p;
+    }
+
+    public void verPlanesDeControl(ArrayList<PlanDeControl>planesDeControl,String enfermedad){
+        p.verPlanesExistente(planesDeControl,enfermedad);
+    }
+    //public void asginarPlan()
+
 
 
 

@@ -19,27 +19,29 @@ public class Login {
        // usuariosDelSistema.put(pa.hashCode(),pa);
         usuariosDelSistema.put(pr.hashCode(),ad);
         usuariosDelSistema.put(ad.hashCode(),pr);
-        Usuario o = null;
+        //Usuario o = null;
 
         for (Map.Entry<Integer,Usuario> entry : usuariosDelSistema.entrySet()) {
 
             if(entry.getValue().getDNI().equals(usuario) && entry.getValue().getContraseña().equals(contraseña)) {
 
                 if(entry.getValue() instanceof Profesional) {
-
-                    o = entry.getValue();
+                    //comprobar dia
+                    //if
+                    //else
+                    return entry.getValue();
                 }
                 else if(entry.getValue() instanceof Administrador){
 
-                    o = entry.getValue();
+                    return entry.getValue();
                 }
                 else{
-
-                    o = entry.getValue();
+                    //comprobar dia
+                    return entry.getValue();
                 }
             }
         }
-        return o;
+        return null;
     }
 
     public String getContraseña() {
