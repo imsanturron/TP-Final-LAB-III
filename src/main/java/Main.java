@@ -11,8 +11,8 @@ public class Main {
         HashMap<String, Administrador> administradores = new HashMap<>();
         ArrayList<String> enfermedades = new ArrayList<>();
         ArrayList<PlanDeControl> planesControl = new ArrayList<>();
-        System.out.println("asdasdsdas");
 
+        /*
         Profesional profesionalprueba = new Profesional("asd", TipoUsuario.PROFESIONAL, "DSD",
                 "dsadff", "eafef3", "fefef");
         Paciente pacienteprueba = new Paciente("juan", TipoUsuario.PACIENTE, "1234", "DDDAS",
@@ -21,7 +21,8 @@ public class Main {
         PlanDeControl planDeControl = new PlanDeControl("gripe", 6);
         planDeControl.agregarTareasPROADM();
         planDeControl.verTareas();
-        
+
         profesionalprueba.asignarPlan(pacientes, planesControl);
+         */
     }
 }

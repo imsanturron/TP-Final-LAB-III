@@ -14,6 +14,8 @@ public class Paciente extends Usuario {
     private String enfermedad;
     private PlanDeControl planDeControl;
     private LocalDate fIni;
+    private LocalDate fCompare;
+    private int comparadorFecha;
     private LocalDate fFin;
     private boolean alertaDeNoRealizacion = false;
     /// HistorialMedico
@@ -29,7 +31,6 @@ public class Paciente extends Usuario {
     public void resetDatosDiaYAlertar() {
         alertaDeNoRealizacion = planDeControl.resetDia();
     }
-
 
     public void verTareasAHacer() {
         planDeControl.verTareas();
@@ -55,9 +56,6 @@ public class Paciente extends Usuario {
         return enfermedad;
     }
 
-    public String getDNI() {
-        return DNI;
-    }
 
     public void setPlanDeControl(PlanDeControl planDeControl) {
         this.planDeControl = planDeControl;
@@ -83,7 +81,24 @@ public class Paciente extends Usuario {
         return alertaDeNoRealizacion;
     }
 
-    public String getNombre(){
+    public String getNombre() {
         return nombreCompleto;
+    }
+
+    public LocalDate getfCompare() {
+        return fCompare;
+    }
+
+    public void setfCompare(LocalDate fCompare) {
+        this.fCompare = fCompare;
+    }
+
+    @Override
+    public String toString() {
+        return "Paciente{" +
+                "enfermedad='" + enfermedad + '\'' +
+                ", nombreCompleto='" + nombreCompleto + '\'' +
+                ", DNI='" + DNI + '\'' +
+                '}';
     }
 }

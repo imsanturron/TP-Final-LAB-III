@@ -1,7 +1,8 @@
-import java.util.HashMap;
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
-public class Administrador extends Usuario {
+public class Administrador extends Usuario implements CrearTratamiento {
     Scanner scan = new Scanner(System.in);
 
     public Administrador(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena
@@ -21,6 +22,7 @@ public class Administrador extends Usuario {
         String edadd = scan.nextLine();
         System.out.println("que enfermedad posee?:");
         String enfmd = scan.nextLine();
+
         Paciente pacientex = new Paciente(nombre, TipoUsuario.PACIENTE, dni, dni,
                 tel, enfmd, asignarProfesional(profesionales), edadd);
 
@@ -59,14 +61,49 @@ public class Administrador extends Usuario {
     }
 
     public Profesional asignarProfesional(HashMap<String, Profesional> profesionales) {
+        Profesional x;
+        Map.Entry<String, Profesional> entry = profesionales.entrySet().iterator().next();
+        x = profesionales.get(entry.getKey());
         for (Profesional profesionalx : profesionales.values()) {
-            return profesionalx;
+            if (profesionalx.getPacientesAAtender().size() < x.getPacientesAAtender().size())
+                x = profesionalx;
         }
-        return profesionales.get("ksamd");
+        return x;
     }
 
     public void darDeBaja() {
+        int opcion=99;
+        System.out.println("dar de baja a:\n 1:Administrador  -  2:Paciente  -  3:Profesional   -   0:Salir");
+        try {
+        opcion=scan.nextInt();
+        while(opcion!=0){
+          /////
+        }}catch (IllegalArgumentException | SecurityException exc) {
+            System.out.println("aaaaaaaaaaaa");
+        }
+    }
 
+    @Override
+    public void crearTratamiento(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planesPredet) { ///ver si esta bien
+        System.out.println("cantidad de dias del plan?");
+        int dias = scan.nextInt();
+        scan.nextLine();
+        System.out.println("enfermedad?");
+        String enf = scan.nextLine();
+        PlanDeControl plan = new PlanDeControl(enf, dias);
+        plan.agregarTareasPROADM();
+
+        planesPredet.add(plan);
+    }
+
+    public void agregarEnfermedad(ArrayList<String> enfermedades){
+        System.out.println("ingrese la enfermedad a agregar:");
+        enfermedades.add(scan.nextLine());
+    }
+
+    public void borrarEnfermedad(ArrayList<String> enfermedades){
+        System.out.println("ingrese la enfermedad a borrar:");
+        ///borrar
     }
 
 

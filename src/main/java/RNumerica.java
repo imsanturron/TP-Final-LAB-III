@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class RNumerica extends Realizar{
-    private int dato = -9999;
+    private double dato = -9999;
     private Scanner scan = new Scanner(System.in);
 
     public RNumerica(String accion, String msjEspecifico) {
@@ -10,13 +10,13 @@ public class RNumerica extends Realizar{
 
     public void ingresarNum(){
         System.out.println("ingrese el dato: ");
-        dato = scan.nextInt();
+        dato = scan.nextDouble();
         scan.nextLine();
         scan.close();
         hecho = true;
     }
 
-    public int getDato() {
+    public double getDato() {
         return dato;
     }
 
