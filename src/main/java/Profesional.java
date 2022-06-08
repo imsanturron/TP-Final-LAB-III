@@ -32,25 +32,26 @@ public class Profesional extends Usuario implements CrearTratamiento {
         int nuevos = 0;
         for (Paciente pacientex : pacientes.values()) {
             if (!pacientex.isAtendido() && matricula.equals(pacientex.getMatriculaMedico())) {
-                System.out.println("nombre:" + pacientex.getNombre() + "enfermedad:" + pacientex.getEnfermedad()
+                System.out.println("Nombre:" + pacientex.getNombre() + "Enfermedad:" + pacientex.getEnfermedad()
                         + " DNI:" + pacientex.getDNI());
                 pacientesAAtender.add(pacientex);
                 nuevos++;
             }
         }
-        System.out.println("tienes " + nuevos + " nuevos pacientes.\ndeseas asignarles planes ahora? s/n");
+        System.out.println("Tienes " + nuevos + " nuevos pacientes.\nDeseas asignarles planes ahora? s/n");
         try {
             char opcion = scan.next().charAt(0);
             scan.nextLine();
             if (opcion == 'S' || opcion == 's')
                 asignarPlan(pacientes, planes);
         } catch (InputMismatchException e) {
-            System.out.println("debiste ingresar un caracter");
+            System.out.println("Debiste ingresar un caracter");
         }
     }
 
     public void asignarPlan(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planes) {
         int opcion, i;
+        boolean satisfactorio;
         char s_n = 's';
         List<Paciente> listaConver = new ArrayList<>(pacientesAAtender);
 
@@ -65,19 +66,26 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
             switch (opcion) {
                 case 1:
-                    asignarPredet(pacs, planes, i);
-                    listaConver.remove(0);
+                    satisfactorio = asignarPredet(pacs, planes, i);
+                    if (satisfactorio) {
+                        pacientesACargo.add(listaConver.get(0));
+                        listaConver.remove(0);
+                    }
                     break;
                 case 2:
-                    modificarPredetYAsignar(pacs, planes, i);
-                    listaConver.remove(0);
+                    satisfactorio = modificarPredetYAsignar(pacs, planes, i);
+                    if (satisfactorio) {
+                        pacientesACargo.add(listaConver.get(0));
+                        listaConver.remove(0);
+                    }
                     break;
                 case 3:
                     crearTratamiento(pacs, planes);
+                    pacientesACargo.add(listaConver.get(0));
                     listaConver.remove(0);
                     break;
             }
-            System.out.println("desea seguir asignando planes? s/n");
+            System.out.println("Desea seguir asignando planes? s/n");
             s_n = scan.next().charAt(0);
             scan.nextLine();
         }
@@ -86,20 +94,21 @@ public class Profesional extends Usuario implements CrearTratamiento {
             System.out.println("No tienes pacientes nuevos!");
     }
 
-    public void asignarPredet(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planes, int i) {
+    public boolean asignarPredet(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planes, int i) {
         List<Paciente> listaConver = new ArrayList<>(pacientesAAtender);
         char s_n;
+        boolean satisfactorio = false;
 
         while (i < planes.size()) {
             if (planes.get(i).getEnfermedad().equalsIgnoreCase(listaConver.get(0).getEnfermedad())) {
-                System.out.println("dias:" + planes.get(i).getDias());
+                System.out.println("Dias:" + planes.get(i).getDias());
                 planes.get(i).verTareas();
                 break;
             }
             i++;
         }
         if (i < planes.size()) {
-            System.out.println("asignar? s/n");
+            System.out.println("Asignar? s/n");
             s_n = scan.next().charAt(0);
             scan.nextLine();
             if (s_n == 's' || s_n == 'S') {
@@ -107,19 +116,24 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
                 pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(planes.get(i).getDias()));
                 pacientesAAtender.remove(listaConver.get(0));
+                satisfactorio = true;
             }
-        } else
+        } else {
             System.out.println("No existe plan predeterminado para esta enfermedad.");
+            satisfactorio = false;
+        }
+        return satisfactorio;
     }
 
-    public void modificarPredetYAsignar(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planes, int i) {
+    public boolean modificarPredetYAsignar(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planes, int i) {
         List<Paciente> listaConver = new ArrayList<>(pacientesAAtender);
         char s_n;
         int dias;
+        boolean satisfactorio = false;
 
         while (i < planes.size()) {
             if (planes.get(i).getEnfermedad().equalsIgnoreCase(listaConver.get(0).getEnfermedad())) {
-                System.out.println("dias:" + planes.get(i).getDias());
+                System.out.println("Dias:" + planes.get(i).getDias());
                 planes.get(i).verTareas();
                 break;
             }
@@ -130,22 +144,67 @@ public class Profesional extends Usuario implements CrearTratamiento {
             s_n = scan.next().charAt(0);
             scan.nextLine();
             if (s_n == 's' || s_n == 'S') {
-                System.out.println("de cuantos dias sera el plan?");
+                System.out.println("De cuantos dias sera el plan?");
                 dias = scan.nextInt();
                 scan.nextLine();
                 pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(planes.get(i).ModificarTareasYAsignarAuxPROADM(dias));
                 pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
                 pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(dias));
                 pacientesAAtender.remove(listaConver.get(0));
-                System.out.println("plan satisfactoriamente asignado.");
+                System.out.println("Plan satisfactoriamente asignado.");
+                satisfactorio = true;
             }
-        } else
+        } else {
             System.out.println("No existe plan predeterminado para esta enfermedad.");
+            satisfactorio = false;
+        }
+        return satisfactorio;
+    }
+
+    public void extenderPlan() {
+        int masDias;
+        List<Paciente> listaConver = new ArrayList<>(pacientesACargo);
+        System.out.println("Ingrese dni del paciente:");
+        String dni = scan.nextLine();
+
+        for (int i = 0; i < listaConver.size(); i++) {
+            if (listaConver.get(i).getDNI().equals(dni)) {
+                System.out.println("Cuantos dias desea extender el plan?");
+                masDias = scan.nextInt();
+                scan.nextLine();
+
+                listaConver.get(i).setfFin(listaConver.get(i).getfFin().plusDays(masDias));
+                break;
+            }
+        }
+    }
+
+    public void finalizarPlan() {
+        List<Paciente> listaConver = new ArrayList<>(pacientesACargo);
+        System.out.println("Ingrese dni del paciente:");
+        String dni = scan.nextLine();
+
+        for (Paciente paciente : listaConver) {
+            if (paciente.getDNI().equals(dni)) {
+                paciente.setfFin(LocalDate.now());
+                paciente.setPlanDeControl(null);////////////////
+                paciente.setEnfermedad("-");
+                ///profesionalPropio
+                paciente.setAtendido(false);
+                for (int z = 0; z < pacientesACargo.size(); z++) {
+                    if (pacientesACargo.get(z).getDNI().equals(dni)) {
+                        pacientesACargo.remove(z);
+                        break;
+                    }
+                }
+                System.out.println("Plan finalizado con exito");
+            }
+        }
     }
 
     public void SeleccionDePacientePorAtender() {
         String dni;
-        System.out.println("digite el dni del paciente del cual desee ver informacion");
+        System.out.println("Digite el dni del paciente del cual desee ver informacion");
         for (Paciente pacientex : pacientesAAtender) {
             System.out.println(pacientex.getNombre() + "  dni:" + pacientex.getDNI());
         }
@@ -157,7 +216,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
         for (Paciente pacientex : pacientesACargo) {
             if (pacientex.getDNI().equals(dni)) {
                 System.out.println(pacientex);
-                 /////buscar cosas
+                /////buscar cosas
                 break;
             }
         }
@@ -176,7 +235,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
     public void crearTratamiento(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> p) {
         List<Paciente> listaConver = new ArrayList<>(pacientesAAtender);
 
-        System.out.println("cantidad de dias del plan:");
+        System.out.println("Cantidad de dias del plan:");
         int dias = scan.nextInt();
         scan.nextLine();
 

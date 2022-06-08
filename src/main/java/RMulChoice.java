@@ -12,7 +12,7 @@ public class RMulChoice extends Realizar {
     public void ingresarOpcionMultiple() {
         Scanner scan = new Scanner(System.in);
         int option;
-        System.out.println("ingrese como lo/se siente a continuacion:" +
+        System.out.println("Ingrese como lo/se siente a continuacion:  " +
                 "1:Optimo       2:Casi en buen estado          3:Mal            4:Pesimo");
         do {
             option = scan.nextInt();
@@ -31,7 +31,7 @@ public class RMulChoice extends Realizar {
                     datOpcion = "Pesimo";
                     break;
                 default:
-                    System.out.println("ingreso un numero invalido! Ingrese nuevamente:");
+                    System.out.println("Ingresaste un numero invalido! Ingrese nuevamente:");
                     break;
             }
         } while (option > 4 || option < 1);

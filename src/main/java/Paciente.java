@@ -37,15 +37,24 @@ public class Paciente extends Usuario {
     }
 
     public void verTareasAHacer() {
-        planDeControl.verTareas();
+        if (planDeControl != null)
+            planDeControl.verTareas();
+        else
+            System.out.println("Usted ya ha finzalizado su plan!");
     }
 
     public void completarTareasAHacer() {
-        planDeControl.completarAcciones();
+        if (planDeControl != null)
+            planDeControl.completarAcciones();
+        else
+            System.out.println("Usted ya ha finzalizado su plan!");
     }
 
     public void modificarTareasAHacer() {
-        planDeControl.modificarAcciones();
+        if (planDeControl != null)
+            planDeControl.modificarAcciones();
+        else
+            System.out.println("Usted ya ha finzalizado su plan!");
     }
 
     public UUID getMatriculaMedico() {
@@ -95,6 +104,14 @@ public class Paciente extends Usuario {
 
     public void setfCompare(LocalDate fCompare) {
         this.fCompare = fCompare;
+    }
+
+    public PlanDeControl getPlanDeControl() {
+        return planDeControl;
+    }
+
+    public void setEnfermedad(String enfermedad) {
+        this.enfermedad = enfermedad;
     }
 
     @Override

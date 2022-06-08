@@ -27,35 +27,35 @@ public class PlanDeControl {
                     System.out.println("saliendo...");
                     break;
                 case 1:
-                    System.out.println("(NUMERICA)\naccion a realizar: ");
+                    System.out.println("(NUMERICA)\nAccion a realizar: ");
                     accion = scan.nextLine();
-                    System.out.println("especificaciones: (ej: horario, aclaraciones...)");
+                    System.out.println("Especificaciones: (ej: horario, aclaraciones...)");
                     especificaciones = scan.nextLine();
                     tareas.add(new RNumerica(accion, especificaciones));
                     break;
                 case 2:
-                    System.out.println("(SI/NO)\naccion a realizar: ");
+                    System.out.println("(SI/NO)\nAccion a realizar: ");
                     accion = scan.nextLine();
-                    System.out.println("especificaciones: (ej: horario, aclaraciones...)");
+                    System.out.println("Especificaciones: (ej: horario, aclaraciones...)");
                     especificaciones = scan.nextLine();
                     tareas.add(new RBooleana(accion, especificaciones));
                     break;
                 case 3:
-                    System.out.println("(DE TEXTO)\naccion a realizar: ");
+                    System.out.println("(DE TEXTO)\nAccion a realizar: ");
                     accion = scan.nextLine();
-                    System.out.println("especificaciones: (ej: horario, aclaraciones...)");
+                    System.out.println("Especificaciones: (ej: horario, aclaraciones...)");
                     especificaciones = scan.nextLine();
                     tareas.add(new RTexto(accion, especificaciones));
                     break;
                 case 4:
-                    System.out.println("(MULTIPLE CHOICE)\naccion a realizar: ");
+                    System.out.println("(MULTIPLE CHOICE)\nAccion a realizar: ");
                     accion = scan.nextLine();
-                    System.out.println("especificaciones: (ej: horario, aclaraciones...)");
+                    System.out.println("Especificaciones: (ej: horario, aclaraciones...)");
                     especificaciones = scan.nextLine();
                     tareas.add(new RMulChoice(accion, especificaciones));
                     break;
                 default:
-                    System.out.println("numero invalido!");
+                    System.out.println("Numero invalido!");
                     break;
             }
         }
@@ -72,12 +72,12 @@ public class PlanDeControl {
             System.out.println("Tareas, de la 1 a la x:");
             planaux.verTareas();
 
-            System.out.println("desea remover(1) o agregar(2)?");
+            System.out.println("Desea remover(1) o agregar(2)?");
             opcion = scan.nextInt();
             scan.nextLine();
 
             if (opcion == 1) {
-                System.out.println("que numero de tarea desea borrar?");
+                System.out.println("Que numero de tarea desea borrar?");
                 opcion = scan.nextInt();
                 scan.nextLine();
                 if (opcion <= planaux.getArrayTareas().size() && opcion > 0) { ///me tira el array de una sin el get, como todo
@@ -92,7 +92,7 @@ public class PlanDeControl {
             } else
                 System.out.println("Numero invalido.");
 
-            System.out.println("desea seguir? s/n");
+            System.out.println("Desea seguir? s/n");
         }
         return planaux;
     }
@@ -122,7 +122,7 @@ public class PlanDeControl {
     public void modificarAcciones() {
         int i = 0, opcion;
         String seguir = "si";
-        System.out.println("que accion desea modificar? ingrese el numero de la accion");
+        System.out.println("Que accion desea modificar? ingrese el numero de la accion");
         while (seguir.equalsIgnoreCase("si")) {
             while (i < tareas.size()) {
                 System.out.println(i + ": " + tareas.get(i).getAccion());
@@ -140,9 +140,9 @@ public class PlanDeControl {
                 else if (tareas.get(opcion) instanceof RMulChoice)
                     ((RMulChoice) tareas.get(opcion)).ingresarOpcionMultiple();
             } else
-                System.out.println("numero no disponible!");
+                System.out.println("Numero no disponible!");
 
-            System.out.println("desea seguir modificando? 'si' si desea seguir");
+            System.out.println("Desea seguir modificando? 'si' si desea seguir");
             seguir = scan.nextLine();
         }
     }

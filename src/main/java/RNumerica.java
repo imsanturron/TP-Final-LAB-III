@@ -9,7 +9,7 @@ public class RNumerica extends Realizar{
     }
 
     public void ingresarNum(){
-        System.out.println("ingrese el dato: ");
+        System.out.println("Ingrese el dato: ");
         dato = scan.nextFloat();
         scan.nextLine();
         scan.close();

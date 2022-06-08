@@ -9,7 +9,7 @@ public class RTexto extends Realizar {
 
     public void ingresarString() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("ingrese su respuesta: ");
+        System.out.println("Ingrese su respuesta: ");
         dato= scan.nextLine();
         hecho = true;
     }
