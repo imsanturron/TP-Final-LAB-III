@@ -67,11 +67,8 @@ public class Sistema {
             } else {
                 System.out.println("usuario o contraseña incorrecta, desea volver a intentarlo?(s/n)");
                 rta = sc.next().charAt(0);
+                sc.nextLine();
             }
-
         } while (rta == 's');
-
-
     }
-
 }

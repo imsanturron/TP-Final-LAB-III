@@ -29,7 +29,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
         pacientes.put(dni, pacientex);
     }
 
-    public void ingresoProfesional(HashMap profesionales) {///lista
+    public void ingresoProfesional(HashMap<String, Profesional> profesionales) {///lista
         System.out.println("ingrese DNI del administrador:");
         String dni = scan.nextLine();
         System.out.println("ingrese el nombre del profesional:");
@@ -44,7 +44,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
         profesionales.put(dni, profesionalx);
     }
 
-    public void registroAdministrador(HashMap administradores) {///lista
+    public void registroAdministrador(HashMap<String, Administrador> administradores) {///lista
         System.out.println("ingrese DNI del administrador:");
         String dni = scan.nextLine();
         System.out.println("ingrese el nombre del administrador:");
@@ -76,6 +76,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
         System.out.println("dar de baja a:\n 1:Administrador  -  2:Paciente  -  3:Profesional   -   0:Salir");
         try {
         opcion=scan.nextInt();
+        scan.nextLine();
         while(opcion!=0){
           /////
         }}catch (IllegalArgumentException | SecurityException exc) {
@@ -108,8 +109,6 @@ public class Administrador extends Usuario implements CrearTratamiento {
 
 
 /*    *fechas
--IngresoPaciente
--IngresoProfesional
 -AdministracionEnfermedades
 -AdministracionPlanesDeControl
 -DarDeBaja

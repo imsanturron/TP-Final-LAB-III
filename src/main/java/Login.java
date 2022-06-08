@@ -3,11 +3,11 @@ import java.util.Map;
 
 public class Login {
     private String usuario;
-    private String contraseña;
+    private String contrasena;
 
-    public Login(String usuario, String contraseña) {
+    public Login(String usuario, String contrasena) {
         this.usuario = usuario;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
     }
 
     public Usuario inicioDeSesion(HashMap<Integer, Usuario> usuariosDelSistema) {
@@ -21,7 +21,7 @@ public class Login {
 
         for (Map.Entry<Integer, Usuario> entry : usuariosDelSistema.entrySet()) {
 
-            if (entry.getValue().getDNI().equals(usuario) && entry.getValue().getContrasena().equals(contraseña)) {
+            if (entry.getValue().getDNI().equals(usuario) && entry.getValue().getContrasena().equals(contrasena)) {
 
                 if (entry.getValue() instanceof Profesional) {
                     return entry.getValue();
@@ -36,7 +36,7 @@ public class Login {
     }
 
     public String getContraseña() {
-        return contraseña;
+        return contrasena;
     }
 
     public String getUsuario() {

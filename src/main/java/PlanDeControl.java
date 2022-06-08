@@ -17,7 +17,7 @@ public class PlanDeControl {
         String accion, especificaciones;
 
         while (opcion != 0) {
-            System.out.println("Que desea agregar?\n  1:Tarea de entrada numerica    ---    2:Tarea de entrada 'si/no'    ");
+            System.out.println("Que desea agregar?\n  1:Tarea de entrada numerica    ---    2:Tarea binaria de entrada 'si/no'    ");
             System.out.println("  3:Tarea de entrada de texto    ---    4:Tarea de entrada tipo multiple choice    ---    0:Salir");
             opcion = scan.nextInt();
             scan.nextLine();
@@ -65,7 +65,7 @@ public class PlanDeControl {
         PlanDeControl planaux = new PlanDeControl(enfermedad, dias);
         planaux.tareas.addAll(planaux.getArrayTareas()); ///ver si se copian, o se pasan y borran
         char seguir = 's';
-        int opcion = 0;
+        int opcion;
 
 
         while (seguir == 's' || seguir == 'S') {
@@ -110,11 +110,11 @@ public class PlanDeControl {
         while (i < tareas.size() && !tareas.get(i).isHecho()) { ///protected me sugiere atributo??????
             if (tareas.get(i) instanceof RNumerica)
                 ((RNumerica) tareas.get(i)).ingresarNum();
-            if (tareas.get(i) instanceof RTexto)
+            else if (tareas.get(i) instanceof RTexto)
                 ((RTexto) tareas.get(i)).ingresarString();
-            if (tareas.get(i) instanceof RBooleana)
+            else if (tareas.get(i) instanceof RBooleana)
                 ((RBooleana) tareas.get(i)).ingresarSN();
-            if (tareas.get(i) instanceof RMulChoice)
+            else if (tareas.get(i) instanceof RMulChoice)
                 ((RMulChoice) tareas.get(i)).ingresarOpcionMultiple();
         }
     }
@@ -129,19 +129,18 @@ public class PlanDeControl {
                 i++;
             }
             opcion = scan.nextInt();
+            scan.nextLine();
             if (opcion < tareas.size()) {
                 if (tareas.get(opcion) instanceof RNumerica)
                     ((RNumerica) tareas.get(opcion)).ingresarNum();
-                if (tareas.get(opcion) instanceof RTexto)
+                else if (tareas.get(opcion) instanceof RTexto)
                     ((RTexto) tareas.get(opcion)).ingresarString();
-                if (tareas.get(opcion) instanceof RBooleana)
+                else if (tareas.get(opcion) instanceof RBooleana)
                     ((RBooleana) tareas.get(opcion)).ingresarSN();
-                if (tareas.get(opcion) instanceof RMulChoice)
+                else if (tareas.get(opcion) instanceof RMulChoice)
                     ((RMulChoice) tareas.get(opcion)).ingresarOpcionMultiple();
             } else
                 System.out.println("numero no disponible!");
-
-            scan.nextLine();
 
             System.out.println("desea seguir modificando? 'si' si desea seguir");
             seguir = scan.nextLine();
@@ -149,30 +148,26 @@ public class PlanDeControl {
     }
 
     public boolean resetDia() {
-        int i = 0, alerta=0;
+        int i = 0, alerta = 0;
 
-        while (i < tareas.size()) {
-            if(tareas.get(i).isHecho() == false)
-                alerta=1;
-
-            if (tareas.get(i) instanceof RNumerica) {
+        while (i < tareas.size() && alerta != 1) {
+            if (!tareas.get(i).isHecho())
+                alerta = 1;
+            else if (tareas.get(i) instanceof RNumerica) {
                 tareas.get(i).setHecho(false);
                 ((RNumerica) tareas.get(i)).setDato(-9999);
-            }
-            if (tareas.get(i) instanceof RTexto) {
+            } else if (tareas.get(i) instanceof RTexto) {
                 tareas.get(i).setHecho(false);
                 ((RTexto) tareas.get(i)).setDato("");
-            }
-            if (tareas.get(i) instanceof RBooleana) {
+            } else if (tareas.get(i) instanceof RBooleana) {
                 tareas.get(i).setHecho(false);
                 ((RBooleana) tareas.get(i)).setDato(false);
-            }
-            if (tareas.get(i) instanceof RMulChoice) {
+            } else if (tareas.get(i) instanceof RMulChoice) {
                 tareas.get(i).setHecho(false);
                 ((RMulChoice) tareas.get(i)).setDatOpcion("sin ingresar");
             }
         }
-        if(alerta==1) {
+        if (alerta == 1) {
             System.out.println("No ingresaste todas tus actividades del dia de ayer. Intenta" +
                     "realizar tus actividades correspondientes por favor.");
             return true;

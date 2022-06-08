@@ -32,6 +32,10 @@ public class Paciente extends Usuario {
         alertaDeNoRealizacion = planDeControl.resetDia();
     }
 
+    public void setAtendido(boolean atendido) {
+        this.atendido = atendido;
+    }
+
     public void verTareasAHacer() {
         planDeControl.verTareas();
     }

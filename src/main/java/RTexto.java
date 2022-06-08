@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 public class RTexto extends Realizar {
-
     private String dato= "";
 
     public RTexto(String accion, String msjEspecifico) {

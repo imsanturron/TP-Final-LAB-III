@@ -13,10 +13,7 @@ public class RBooleana extends Realizar {
         System.out.println("Ingrese: si/no...");
         ingresa = scan.nextLine();
         hecho = true;
-        if (ingresa.equalsIgnoreCase("si"))
-            dato = true;
-        else
-            dato = false;
+        dato = ingresa.equalsIgnoreCase("si");
     }
 
     public boolean isDato() {
