@@ -1,8 +1,6 @@
-import org.w3c.dom.ls.LSOutput;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.swing.*;
-import java.awt.desktop.ScreenSleepEvent;
-import java.lang.reflect.Array;
+import java.io.File;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
@@ -14,7 +12,8 @@ public class Sistema {
     HashMap<String, Administrador> administradores = new HashMap<>();
     HashMap<Integer, Usuario> usuariosDelSistema = new HashMap<>();
     ArrayList<PlanDeControl> PlanesDeControl = new ArrayList<>();
-    static Scanner sc = new Scanner(System.in);
+    ObjectMapper mapper = new ObjectMapper();
+    static Scanner sc = new Scanner(System.in); ///static
 
 
     public void menu() {
@@ -40,8 +39,6 @@ public class Sistema {
                          *AdministracionPlanesDeControl
                          *DarDeBaja
                          * */
-
-
                     }
                     break;
                     case PACIENTE: {

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -6,11 +7,15 @@ https://github.com/imsanturron/TP-Final-LAB-III.git
  */
 public class Main {
     public static void main(String[] args) {
-        HashMap<String, Paciente> pacientes = new HashMap<>();  //hacerlas static?
+        Sistema sistema = new Sistema();
+        sistema.menu();
+
+        /*HashMap<String, Paciente> pacientes = new HashMap<>();  //hacerlas static?
         HashMap<String, Profesional> profesionales = new HashMap<>();
         HashMap<String, Administrador> administradores = new HashMap<>();
         ArrayList<String> enfermedades = new ArrayList<>();
-        ArrayList<PlanDeControl> planesControl = new ArrayList<>();
+        ArrayList<PlanDeControl> planesControl = new ArrayList<>();*/
+
 
         /*
         Profesional profesionalprueba = new Profesional("asd", TipoUsuario.PROFESIONAL, "DSD",
