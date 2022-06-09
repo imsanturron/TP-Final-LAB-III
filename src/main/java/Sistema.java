@@ -18,6 +18,20 @@ public class Sistema {
         char rta = 'n';
 
         do {
+            Profesional x = new Profesional("sad", TipoUsuario.PROFESIONAL, "QE",
+                    "ASDAF", "ASFAWF", "FAFAWF");
+            Profesional profesionalprueba = new Profesional("DR carlos", TipoUsuario.PROFESIONAL, "D465",
+                    "dsadff", "eafef3", "68");
+            Paciente pacso = new Paciente("paciente juan", TipoUsuario.PACIENTE, "999",
+                    "DAFF", "DASD", "gripe", x, "44");
+            pacso.setfFin(LocalDate.now());
+            pacso.setfFin(LocalDate.now().plusDays(88));
+            pacso.setfIni(LocalDate.now().plusDays(2));
+            profesionalprueba.getPacientesACargo().add(pacso);
+            profesionales.put(profesionalprueba.getDNI(), profesionalprueba);
+            Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+
+
             //serializacion y deserializacion testeada.
             String user, contrasena;
             System.out.println("usuario: ");
@@ -31,7 +45,9 @@ public class Sistema {
                 switch (us.tipoUsuario) {
                     case ADMINISTRADOR: {
                         System.out.println("administrador");
+                        Administrador admin = (Administrador) us;
 
+                        ///menu
 
                         /**AdministracionEnfermedades
                          *AdministracionPlanesDeControl
@@ -44,7 +60,17 @@ public class Sistema {
                         Paciente paciente = (Paciente) us;
                         paciente.setfCompare(LocalDate.now());
                         Duration d = Duration.between(paciente.getfIni(), paciente.getfCompare());
-                        //if(d.toDays() > )
+
+                        if(d.toDays() == paciente.getComparadorFecha()) {
+                            boolean opt = paciente.getPlanDeControl().resetDia();
+                            paciente.setAlertaDeNoRealizacion(opt);
+                            paciente.setComparadorFecha(paciente.getComparadorFecha() + 1);
+                        }
+                        if(paciente.getfCompare() == paciente.getfFin()){
+                            System.out.println("ha finalizado su plan");
+                            paciente.resetPaciente();
+                        }
+                      ///menu
 
                     }
                     break;
@@ -59,6 +85,9 @@ public class Sistema {
                          *LlamadoAyudaSistema
                          * **/
                         Profesional profesional = (Profesional) us;
+                        profesional.infoAyerTareasPacientes();
+
+                        ///menu
                     }
                     break;
                 }

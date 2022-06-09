@@ -1,3 +1,6 @@
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -13,10 +16,21 @@ public class Paciente extends Usuario {
     private boolean atendido = false;
     private String enfermedad;
     private PlanDeControl planDeControl;
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate fIni;
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate fCompare;
+
     private int comparadorFecha;
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate fFin;
+
     private boolean alertaDeNoRealizacion = false;
     /// HistorialMedico
     /// hacer un array del plan que solo guarde eso?
@@ -55,6 +69,18 @@ public class Paciente extends Usuario {
             planDeControl.modificarAcciones();
         else
             System.out.println("Usted ya ha finzalizado su plan!");
+    }
+
+    public void resetPaciente() {
+    this.fCompare = null;
+    this.fFin = null;
+    this.fIni = null;
+    this.atendido  = false;
+    this.enfermedad = "";
+    this.planDeControl = null;
+    this.alertaDeNoRealizacion = false;
+    this.comparadorFecha = 0;
+    //this.profesionalPropio = null;
     }
 
     public UUID getMatriculaMedico() {

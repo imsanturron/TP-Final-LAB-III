@@ -27,7 +27,18 @@ public class Main {
         planDeControl.agregarTareasPROADM();
         planDeControl.verTareas();
 
+
         profesionalprueba.asignarPlan(pacientes, planesControl);
+
+                    Profesional x = new Profesional("sad", TipoUsuario.PROFESIONAL, "QE",
+                    "ASDAF", "ASFAWF", "FAFAWF");
+            Profesional profesionalprueba = new Profesional("DR carlos", TipoUsuario.PROFESIONAL, "D465",
+                    "dsadff", "eafef3", "68");
+            profesionalprueba.getPacientesACargo().add(new Paciente("paciente juan", TipoUsuario.PACIENTE, "999",
+                    "DAFF", "DASD", "gripe", x, "44"));
+            profesionales.put(profesionalprueba.getDNI(), profesionalprueba);
+            Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+
          */
     }
 }

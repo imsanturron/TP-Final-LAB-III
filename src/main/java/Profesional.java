@@ -24,7 +24,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
     public void infoAyerTareasPacientes() {
         for (Paciente x : pacientesACargo) {
             if (x.isAlertaDeNoRealizacion())
-                System.out.println(x.getNombre() + " (dni:" + x.getDNI() + ") no cumplio con todas las tareas de ayer");
+                System.out.println(x.getNombre() + ", (dni:" + x.getDNI() + ") no cumplio con todas las tareas de ayer");
         }
     }
 
@@ -115,6 +115,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(planes.get(i));
                 pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
                 pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(planes.get(i).getDias()));
+                pacs.get(listaConver.get(0).getDNI()).setComparadorFecha(1);
                 pacientesAAtender.remove(listaConver.get(0));
                 satisfactorio = true;
             }
@@ -150,6 +151,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(planes.get(i).ModificarTareasYAsignarAuxPROADM(dias));
                 pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
                 pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(dias));
+                pacs.get(listaConver.get(0).getDNI()).setComparadorFecha(1);
                 pacientesAAtender.remove(listaConver.get(0));
                 System.out.println("Plan satisfactoriamente asignado.");
                 satisfactorio = true;
@@ -186,11 +188,8 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
         for (Paciente paciente : listaConver) {
             if (paciente.getDNI().equals(dni)) {
-                paciente.setfFin(LocalDate.now());
-                paciente.setPlanDeControl(null);////////////////
-                paciente.setEnfermedad("-");
-                ///profesionalPropio
-                paciente.setAtendido(false);
+                paciente.resetPaciente();
+
                 for (int z = 0; z < pacientesACargo.size(); z++) {
                     if (pacientesACargo.get(z).getDNI().equals(dni)) {
                         pacientesACargo.remove(z);
@@ -245,6 +244,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
         pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(plan);
         pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
         pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(dias));
+        pacs.get(listaConver.get(0).getDNI()).setComparadorFecha(1);
         pacientesAAtender.remove(listaConver.get(0));
         ///sugerir predet a admin
 
