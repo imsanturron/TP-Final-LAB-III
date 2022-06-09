@@ -257,4 +257,12 @@ public class Profesional extends Usuario implements CrearTratamiento {
     public ArrayList<Paciente> getPacientesACargo() {
         return pacientesACargo;
     }
+
+    public void setPacientesAAtender(HashSet<Paciente> pacientesAAtender) {
+        this.pacientesAAtender = pacientesAAtender;
+    }
+
+    public void setPacientesACargo(ArrayList<Paciente> pacientesACargo) {
+        this.pacientesACargo = pacientesACargo;
+    }
 }

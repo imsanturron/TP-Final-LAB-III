@@ -7,20 +7,18 @@ import java.util.*;
 
 public class Sistema {
 
-    HashMap<Integer, Paciente> pacientes = new HashMap<>();
-    HashMap<Integer, Profesional> profesionales = new HashMap<>();
+    HashMap<String, Paciente> pacientes = new HashMap<>();
+    HashMap<String, Profesional> profesionales = new HashMap<>();
     HashMap<String, Administrador> administradores = new HashMap<>();
-    HashMap<Integer, Usuario> usuariosDelSistema = new HashMap<>();
-    ArrayList<PlanDeControl> PlanesDeControl = new ArrayList<>();
-    ObjectMapper mapper = new ObjectMapper();
+    HashMap<String, Usuario> usuariosDelSistema = new HashMap<>();
+    ArrayList<PlanDeControl> planesDeControl = new ArrayList<>();
+    ArrayList<String> enfermedades = new ArrayList<>();
     static Scanner sc = new Scanner(System.in); ///static
-
-
     public void menu() {
         char rta = 'n';
 
         do {
-
+            //serializacion y deserializacion testeada.
             String user, contrasena;
             System.out.println("usuario: ");
             user = sc.nextLine();

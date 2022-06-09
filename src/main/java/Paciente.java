@@ -19,7 +19,7 @@ public class Paciente extends Usuario {
     private LocalDate fFin;
     private boolean alertaDeNoRealizacion = false;
     /// HistorialMedico
-
+    /// hacer un array del plan que solo guarde eso?
 
     public Paciente(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena,
                     String telefono, String enfermedad, Profesional profesionalPropio, String edad) {
@@ -112,6 +112,26 @@ public class Paciente extends Usuario {
 
     public void setEnfermedad(String enfermedad) {
         this.enfermedad = enfermedad;
+    }
+
+    public Profesional getProfesionalPropio() {
+        return profesionalPropio;
+    }
+
+    public void setProfesionalPropio(Profesional profesionalPropio) {
+        this.profesionalPropio = profesionalPropio;
+    }
+
+    public int getComparadorFecha() {
+        return comparadorFecha;
+    }
+
+    public void setComparadorFecha(int comparadorFecha) {
+        this.comparadorFecha = comparadorFecha;
+    }
+
+    public void setAlertaDeNoRealizacion(boolean alertaDeNoRealizacion) {
+        this.alertaDeNoRealizacion = alertaDeNoRealizacion;
     }
 
     @Override

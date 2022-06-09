@@ -27,6 +27,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
                 tel, enfmd, asignarProfesional(profesionales), edadd);
 
         pacientes.put(dni, pacientex);
+        Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
     }
 
     public void ingresoProfesional(HashMap<String, Profesional> profesionales) {///lista
@@ -42,6 +43,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
                 dni, tel, edadd);
 
         profesionales.put(dni, profesionalx);
+        Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
     }
 
     public void registroAdministrador(HashMap<String, Administrador> administradores) {///lista
@@ -58,6 +60,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
                 dni, dni, tel, edadd);
 
         administradores.put(dni, administradorx);
+        Persistencia.serializeHashMap(administradores, Archivos.ADMINISTRADORESALL.getPath());
     }
 
     public Profesional asignarProfesional(HashMap<String, Profesional> profesionales) {
@@ -95,17 +98,20 @@ public class Administrador extends Usuario implements CrearTratamiento {
         plan.agregarTareasPROADM();
 
         planesPredet.add(plan);
+        Persistencia.serializeArrayList(planesPredet, Archivos.PLANESPREDET.getPath());
     }
 
     public void agregarEnfermedad(ArrayList<String> enfermedades){
         System.out.println("ingrese la enfermedad a agregar:");
         enfermedades.add(scan.nextLine());
+        Persistencia.serializeArrayList(enfermedades, Archivos.ENFERMEDADESALL.getPath());
     }
 
     public void borrarEnfermedad(ArrayList<String> enfermedades){
         System.out.println("ingrese la enfermedad a borrar:");
         ///borrar
     }
+
 
 
 /*    *fechas
