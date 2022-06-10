@@ -51,14 +51,13 @@ public class Sistema {
                         administradores = Persistencia.DEserializeHashMap(Archivos.ADMINISTRADORESALL.getPath());
                         pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath());
                         profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath());
-                        System.out.println("administrador");
+                        System.out.println("Administrador");
                         Administrador admin = (Administrador) us;
                         for (String clave : administradores.keySet()) {
                             if (admin.getDNI().equals(clave))
                                 admin = administradores.get(clave);
                         }
-                        ///menu
-                        System.out.println("Bienvenido: " + admin.getNombreCompleto());
+                        System.out.println("Bienvenido " + admin.getNombreCompleto());
 
                         do {
                             System.out.println("que desea hacer?");
@@ -99,20 +98,22 @@ public class Sistema {
                                 default -> System.out.println("opcion inexistente");
                             }
                         } while (option != 0);
-                        /**AdministracionEnfermedades
-                         *AdministracionPlanesDeControl
+                        /**
                          *DarDeBaja
                          * */
                     }
                     break;
 
                     case PACIENTE: {
-                        System.out.println("paciente");
+                        pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath());
+                        profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath());
+                        System.out.println("Paciente");
                         Paciente paciente = (Paciente) us;
                         for (String clave : pacientes.keySet()) {
                             if (paciente.getDNI().equals(clave))
                                 paciente = pacientes.get(clave);
                         }
+
                         if (paciente.getfIni() != null) {
                             paciente.setfCompare(LocalDate.now());
                             Duration d = Duration.between(paciente.getfIni(), paciente.getfCompare());
@@ -120,22 +121,22 @@ public class Sistema {
                             if (d.toDays() == paciente.getComparadorFecha()) {
                                 paciente.getPlanDeControl().infoTareasDiaX();
                                 paciente.persistirDia();
-                                boolean opt = paciente.getPlanDeControl().resetDia(); ///alerta a paciente
-                                paciente.setAlertaDeNoRealizacion(opt);
+                                Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
+                                paciente.resetDatosDiaYAlertar();
                                 paciente.setComparadorFecha(paciente.getComparadorFecha() + 1);
                             }
                         }
                         if (paciente.getfCompare() == paciente.getfFin() || (paciente.getfFin() == null || paciente.getfCompare() == null)) {
-                            System.out.println("ha finalizado su plan");
+                            System.out.println("Ha finalizado su plan");
                             paciente.resetPaciente();
                         } else {
 
                             do {
                                 System.out.println("que desea hacer?");
-                                System.out.println("0)salir");
-                                System.out.println("1)completar tareas por hacer");
-                                System.out.println("2)modificar tareas por hacer");
-                                System.out.println("3)ver tareas por hacer");
+                                System.out.println("0)Salir");
+                                System.out.println("1)Ver tareas a hacer");
+                                System.out.println("2)Completar tareas a hacer");
+                                System.out.println("3)Modificar tareas hechas");
                                 option = sc.nextInt();
                                 sc.nextLine();
                                 switch (option) {
@@ -144,33 +145,32 @@ public class Sistema {
                                         rta = 'n';
                                     }
                                     case 1 -> {
-                                        paciente.completarTareasAHacer();
-                                        Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
-                                    }
-                                    case 2 -> {
-                                        paciente.modificarTareasAHacer();
-                                        Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
-                                    }
-                                    case 3 -> {
                                         paciente.verTareasAHacer();
                                     }
-                                    default -> {
-                                        System.out.println("opcion inexistente");
+                                    case 2 -> {
+                                        paciente.completarTareasAHacer();
+                                        Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
+                                        Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     }
+                                    case 3 -> {
+                                        paciente.modificarTareasAHacer();
+                                        Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
+                                        Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
+                                    }
+                                    default -> System.out.println("opcion inexistente");
                                 }
                             } while (option != 0);
                         }
-                        ///menu
                     }
                     break;
 
                     case PROFESIONAL: {
+                        administradores = Persistencia.DEserializeHashMap(Archivos.ADMINISTRADORESALL.getPath());
+                        pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath());
+                        profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath());
                         System.out.println("profesional");
                         /***
-                         *CrearPlanDeControl
-                         *ModificarPlanExistente
                          *ControlPacientes
-                         *FinalizaroExtender
                          *VerDatosPaciente(atributos, historial, etc)
                          *LlamadoAyudaSistema
                          * **/
@@ -183,9 +183,9 @@ public class Sistema {
 
                         do {
                             System.out.println("que desea hacer?");
-                            System.out.println("0:Salir  ---  1:ver informaciones de tareas de ayer de los pacientes  ---  2:asignar plan");
-                            System.out.println("3:Seleccionar paciente a atender  ---  4:ver nuevos pacientes a atender");
-                            System.out.println("5:extender plan  ---  6:finalizar plan");
+                            System.out.println("0:Salir  ---  1:ver informaciones de tareas de ayer de los pacientes ");
+                            System.out.println("2:ver nuevos pacientes a atender  ---  3:asignar planes");
+                            System.out.println("4:Seleccionar paciente a atender  ---  5:extender plan  ---  6:finalizar plan");
                             option = sc.nextInt();
                             sc.nextLine();
                             switch (option) {
@@ -197,16 +197,17 @@ public class Sistema {
                                     profesional.infoPacientesAyer();
                                 }
                                 case 2 -> {
+                                    profesional.verNuevosPacientes(pacientes, planesDeControl);
+                                    Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+                                    //esto me serializa arrays dentro de profesional?
+                                }
+                                case 3 -> {
                                     profesional.asignarPlan(pacientes, planesDeControl);
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
                                 }
-                                case 3 -> {
-                                    profesional.SeleccionDePacientePorAtender();
-                                }
                                 case 4 -> {
-                                    profesional.verNuevosPacientes(pacientes, planesDeControl);
-                                    Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+                                    profesional.SeleccionDePacientePorAtender();
                                 }
                                 case 5 -> {
                                     profesional.extenderPlan();
@@ -218,20 +219,17 @@ public class Sistema {
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
                                 }
-                                default -> {
-                                    System.out.println("opcion inexistente");
-                                }
+                                default -> System.out.println("opcion inexistente");
                             }
                         } while (option != 0);
-                        ///menu
                     }
                     break;
                 }
             } else {
-                System.out.println("usuario o contraseña incorrecta, desea volver a intentarlo?(s/n)");
+                System.out.println("Usuario o contraseña incorrecta, desea volver a intentarlo?(s/n)");
                 rta = sc.next().charAt(0);
                 sc.nextLine();
             }
-        } while (rta == 's');
+        } while (rta == 's' || rta == 'S');
     }
 }

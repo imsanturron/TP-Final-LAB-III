@@ -49,9 +49,6 @@ public class Paciente extends Usuario {
         alertaDeNoRealizacion = planDeControl.resetDia();
     }
 
-    public void setAtendido(boolean atendido) {
-        this.atendido = atendido;
-    }
 
     public void verTareasAHacer() {
         if (planDeControl != null)
@@ -161,6 +158,10 @@ public class Paciente extends Usuario {
 
     public void setAlertaDeNoRealizacion(boolean alertaDeNoRealizacion) {
         this.alertaDeNoRealizacion = alertaDeNoRealizacion;
+    }
+
+    public void setAtendido(boolean atendido) {
+        this.atendido = atendido;
     }
 
     public ArrayList<PlanDeControl> getHistorialMedico() {
