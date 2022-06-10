@@ -74,4 +74,6 @@ public class Usuario {
     public String getContrasena() {
         return contrasena;
     }
+
+
 }

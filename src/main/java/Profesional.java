@@ -21,11 +21,37 @@ public class Profesional extends Usuario implements CrearTratamiento {
         matricula = UUID.randomUUID();
     }
 
-    public void infoAyerTareasPacientes() {
+    public void AlertaNoRealizacionAyerPacientes() {
         for (Paciente x : pacientesACargo) {
             if (x.isAlertaDeNoRealizacion())
                 System.out.println(x.getNombre() + ", (dni:" + x.getDNI() + ") no cumplio con todas las tareas de ayer");
         }
+    }
+
+    public void infoPacientesAyer() {
+        char seguir = 's';
+
+        if (pacientesACargo.size() > 0) {
+            for (Paciente x : pacientesACargo) {
+                System.out.println(x.getNombre() + ", (dni:" + x.getDNI() + "), (enfermedad:" + x.getEnfermedad() + ")");
+            }
+
+            while (seguir == 's' || seguir == 'S') {
+                System.out.println("Ingrese el dni del paciente para ver informacion de sus actividades de ayer:");
+                String dni = scan.nextLine();
+
+                for (Paciente pacientex : pacientesACargo) {
+                    if (pacientex.getDNI().equals(dni)) {
+                        pacientex.getHistorialMedico().get(pacientex.getHistorialMedico().size() - 1).infoTareasDiaX();
+                        break;
+                    }
+                }
+                System.out.println("Desea seguir viendo actividad de pacientes? s/n");
+                seguir = scan.next().charAt(0);
+                scan.nextLine();
+            }
+        } else
+            System.out.println("No tiene ningun paciente a cargo por el momento.");
     }
 
     public void verNuevosPacientes(HashMap<String, Paciente> pacientes, ArrayList<PlanDeControl> planes) {
@@ -38,14 +64,17 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 nuevos++;
             }
         }
-        System.out.println("Tienes " + nuevos + " nuevos pacientes.\nDeseas asignarles planes ahora? s/n");
-        try {
-            char opcion = scan.next().charAt(0);
-            scan.nextLine();
-            if (opcion == 'S' || opcion == 's')
-                asignarPlan(pacientes, planes);
-        } catch (InputMismatchException e) {
-            System.out.println("Debiste ingresar un caracter");
+        System.out.println("Tienes " + nuevos + " nuevos pacientes.");
+        if (nuevos > 0) {
+            System.out.println("Deseas asignarles planes ahora? s/n");
+            try {
+                char opcion = scan.next().charAt(0);
+                scan.nextLine();
+                if (opcion == 'S' || opcion == 's')
+                    asignarPlan(pacientes, planes);
+            } catch (InputMismatchException e) {
+                System.out.println("Debiste ingresar un caracter");
+            }
         }
     }
 
@@ -112,6 +141,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
             s_n = scan.next().charAt(0);
             scan.nextLine();
             if (s_n == 's' || s_n == 'S') {
+                ///hacer deep copy
                 pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(planes.get(i));
                 pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
                 pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(planes.get(i).getDias()));
@@ -179,6 +209,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 break;
             }
         }
+        System.out.println("Plan extendido exitosamente.");
     }
 
     public void finalizarPlan() {

@@ -2,6 +2,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Paciente extends Usuario {
@@ -15,7 +16,7 @@ public class Paciente extends Usuario {
     private Profesional profesionalPropio;
     private boolean atendido = false;
     private String enfermedad;
-    private PlanDeControl planDeControl;
+    private PlanDeControl planDeControl; ///clonar
 
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -32,8 +33,7 @@ public class Paciente extends Usuario {
     private LocalDate fFin;
 
     private boolean alertaDeNoRealizacion = false;
-    /// HistorialMedico
-    /// hacer un array del plan que solo guarde eso?
+    ArrayList<PlanDeControl> historialMedico = new ArrayList<>();
 
     public Paciente(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena,
                     String telefono, String enfermedad, Profesional profesionalPropio, String edad) {
@@ -42,6 +42,9 @@ public class Paciente extends Usuario {
         this.enfermedad = enfermedad;
     }
 
+    public void persistirDia(){
+        historialMedico.add(planDeControl); ///persistir paciente entero o como
+    }
     public void resetDatosDiaYAlertar() {
         alertaDeNoRealizacion = planDeControl.resetDia();
     }
@@ -158,6 +161,14 @@ public class Paciente extends Usuario {
 
     public void setAlertaDeNoRealizacion(boolean alertaDeNoRealizacion) {
         this.alertaDeNoRealizacion = alertaDeNoRealizacion;
+    }
+
+    public ArrayList<PlanDeControl> getHistorialMedico() {
+        return historialMedico;
+    }
+
+    public void setHistorialMedico(ArrayList<PlanDeControl> historialMedico) {
+        this.historialMedico = historialMedico;
     }
 
     @Override

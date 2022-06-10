@@ -1,6 +1,4 @@
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 public class Administrador extends Usuario implements CrearTratamiento {
     Scanner scan = new Scanner(System.in);
@@ -11,7 +9,8 @@ public class Administrador extends Usuario implements CrearTratamiento {
 
     }
 
-    public void ingresoPaciente(HashMap<String, Paciente> pacientes, HashMap<String, Profesional> profesionales) {///lista
+    public void ingresoPaciente(HashMap<String, Paciente> pacientes, HashMap<String, Profesional> profesionales
+            , HashMap<String, Usuario> usuarios) {///lista
         System.out.println("ingrese DNI del paciente:");
         String dni = scan.nextLine();
         System.out.println("ingrese el nombre del paciente:");
@@ -27,11 +26,12 @@ public class Administrador extends Usuario implements CrearTratamiento {
                 tel, enfmd, asignarProfesional(profesionales), edadd);
 
         pacientes.put(dni, pacientex);
+        usuarios.put(dni, pacientex);
         Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
     }
 
-    public void ingresoProfesional(HashMap<String, Profesional> profesionales) {///lista
-        System.out.println("ingrese DNI del administrador:");
+    public void ingresoProfesional(HashMap<String, Profesional> profesionales, HashMap<String, Usuario> usuarios) {///lista
+        System.out.println("ingrese DNI del profesional:");
         String dni = scan.nextLine();
         System.out.println("ingrese el nombre del profesional:");
         String nombre = scan.nextLine();
@@ -43,10 +43,11 @@ public class Administrador extends Usuario implements CrearTratamiento {
                 dni, tel, edadd);
 
         profesionales.put(dni, profesionalx);
+        usuarios.put(dni, profesionalx);
         Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
     }
 
-    public void registroAdministrador(HashMap<String, Administrador> administradores) {///lista
+    public void registroAdministrador(HashMap<String, Administrador> administradores, HashMap<String, Usuario> usuarios) {///lista
         System.out.println("ingrese DNI del administrador:");
         String dni = scan.nextLine();
         System.out.println("ingrese el nombre del administrador:");
@@ -60,6 +61,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
                 dni, dni, tel, edadd);
 
         administradores.put(dni, administradorx);
+        usuarios.put(dni, administradorx);
         Persistencia.serializeHashMap(administradores, Archivos.ADMINISTRADORESALL.getPath());
     }
 

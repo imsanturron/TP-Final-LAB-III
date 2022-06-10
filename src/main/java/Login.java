@@ -14,9 +14,11 @@ public class Login {
         //Paciente pa = new Paciente("facu",TipoUsuario.PACIENTE,"41307695","1234","2236839973","dearrea",null,"25");
         Profesional pr = new Profesional("carlos", TipoUsuario.PROFESIONAL, "44307696", "12345", "2236839973", "26");
         Administrador ad = new Administrador("benjamin", TipoUsuario.ADMINISTRADOR, "41307697", "123456", "2236839973", "27");
+        Paciente pc = new Paciente("juan", TipoUsuario.PACIENTE, "25896", "1234", "234325", "ewrw", pr, "rr");
         // usuariosDelSistema.put(pa.hashCode(),pa);
         usuariosDelSistema.put(pr.getDNI(), pr);
         usuariosDelSistema.put(ad.getDNI(), ad);
+        usuariosDelSistema.put(pc.getDNI(), pc);
         //Usuario o = null;
 
         for (Map.Entry<String, Usuario> entry : usuariosDelSistema.entrySet()) {
