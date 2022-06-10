@@ -19,6 +19,14 @@ public class Usuario {
         altaDeUsuario = true;
     }
 
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
     public String getDNI() {
         return DNI;
     }
@@ -66,4 +74,6 @@ public class Usuario {
     public String getContrasena() {
         return contrasena;
     }
+
+
 }

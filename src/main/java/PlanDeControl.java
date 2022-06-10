@@ -1,24 +1,35 @@
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class PlanDeControl {
     private String enfermedad;
     private int dias;
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate hoy;
     private ArrayList<Realizar> tareas = new ArrayList<>();
     private Scanner scan = new Scanner(System.in);
 
     public PlanDeControl(String enfermedad, int dias) {
         this.enfermedad = enfermedad;
         this.dias = dias;
+        hoy = LocalDate.now();
     }
+
 
     public void agregarTareasPROADM() {
         int opcion = 999;
         String accion, especificaciones;
 
         while (opcion != 0) {
-            System.out.println("Que desea agregar?\n  1:Tarea de entrada numerica    ---    2:Tarea binaria de entrada 'si/no'    ");
-            System.out.println("  3:Tarea de entrada de texto    ---    4:Tarea de entrada tipo multiple choice    ---    0:Salir");
+            System.out.println("Que desea agregar? Agregue las tareas en orden de realizacion");
+            System.out.println("  1:Tarea de entrada numerica    ---    2:Tarea binaria de entrada 'si/no'");
+            System.out.println("  3:Tarea de entrada de texto    ---    4:Tarea de entrada tipo multiple choice    ----    0:Salir");
             opcion = scan.nextInt();
             scan.nextLine();
 
@@ -63,11 +74,9 @@ public class PlanDeControl {
 
     public PlanDeControl ModificarTareasYAsignarAuxPROADM(int dias) {
         PlanDeControl planaux = new PlanDeControl(enfermedad, dias);
-        planaux.tareas.addAll(planaux.getArrayTareas()); ///ver si se copian, o se pasan y borran
+        planaux.tareas.addAll(planaux.getTareas()); ///ver si se copian, o se pasan y borran
         char seguir = 's';
         int opcion;
-
-
         while (seguir == 's' || seguir == 'S') {
             System.out.println("Tareas, de la 1 a la x:");
             planaux.verTareas();
@@ -80,12 +89,12 @@ public class PlanDeControl {
                 System.out.println("Que numero de tarea desea borrar?");
                 opcion = scan.nextInt();
                 scan.nextLine();
-                if (opcion <= planaux.getArrayTareas().size() && opcion > 0) { ///me tira el array de una sin el get, como todo
-                    System.out.println(planaux.getArrayTareas().get(opcion - 1).getAccion() + "  ---> seguro que desea" +
+                if (opcion <= planaux.getTareas().size() && opcion > 0) { ///me tira el array de una sin el get, como todo
+                    System.out.println(planaux.getTareas().get(opcion - 1).getAccion() + "  ---> seguro que desea" +
                             "borrar esta tarea? s/n");
                     seguir = scan.next().charAt(0);
                     if (seguir == 's' || seguir == 'S')
-                        planaux.getArrayTareas().remove(opcion - 1);
+                        planaux.getTareas().remove(opcion - 1);
                 }
             } else if (opcion == 2) {
                 planaux.agregarTareasPROADM();
@@ -106,8 +115,9 @@ public class PlanDeControl {
     }
 
     public void completarAcciones() {
+        char seguir = 's';
         int i = 0;
-        while (i < tareas.size() && !tareas.get(i).isHecho()) { ///protected me sugiere atributo??????
+        while (i < tareas.size() && !tareas.get(i).isHecho() && (seguir == 's' || seguir == 'S')) { ///protected me sugiere atributo??????
             if (tareas.get(i) instanceof RNumerica)
                 ((RNumerica) tareas.get(i)).ingresarNum();
             else if (tareas.get(i) instanceof RTexto)
@@ -116,20 +126,27 @@ public class PlanDeControl {
                 ((RBooleana) tareas.get(i)).ingresarSN();
             else if (tareas.get(i) instanceof RMulChoice)
                 ((RMulChoice) tareas.get(i)).ingresarOpcionMultiple();
+
+            System.out.println("desea seguir ingresando?");
+            seguir = scan.next().charAt(0);
+            scan.nextLine();
         }
     }
 
     public void modificarAcciones() {
         int i = 0, opcion;
-        String seguir = "si";
-        System.out.println("Que accion desea modificar? ingrese el numero de la accion");
-        while (seguir.equalsIgnoreCase("si")) {
+        char seguir = 's';
+        System.out.println("Que accion desea modificar?");
+        while (seguir == 's' || seguir == 'S') {
             while (i < tareas.size()) {
                 System.out.println(i + ": " + tareas.get(i).getAccion());
                 i++;
             }
+
+            System.out.println("\nIngrese el numero de la accion:");
             opcion = scan.nextInt();
             scan.nextLine();
+
             if (opcion < tareas.size()) {
                 if (tareas.get(opcion) instanceof RNumerica)
                     ((RNumerica) tareas.get(opcion)).ingresarNum();
@@ -142,13 +159,15 @@ public class PlanDeControl {
             } else
                 System.out.println("Numero no disponible!");
 
-            System.out.println("Desea seguir modificando? 'si' si desea seguir");
-            seguir = scan.nextLine();
+            System.out.println("Desea seguir modificando? s/n");
+            seguir = scan.next().charAt(0);
+            scan.nextLine();
         }
     }
 
     public boolean resetDia() {
         int i = 0, alerta = 0;
+        hoy = LocalDate.now();
 
         while (i < tareas.size() && alerta != 1) {
             if (!tareas.get(i).isHecho())
@@ -175,15 +194,52 @@ public class PlanDeControl {
         return false;
     }
 
+    public void infoTareasDiaX() {
+        int i = 0;
+        System.out.println(hoy);
+        while (i < tareas.size()) {
+            if (!tareas.get(i).isHecho())
+                System.out.println(tareas.get(i).getAccion() + ": !-tarea sin realizar-!");
+            else if (tareas.get(i) instanceof RNumerica)
+                System.out.println(tareas.get(i).getAccion() + ": " + ((RNumerica) tareas.get(i)).getDato());
+            else if (tareas.get(i) instanceof RTexto)
+                System.out.println(tareas.get(i).getAccion() + ": " + ((RTexto) tareas.get(i)).getDato());
+            else if (tareas.get(i) instanceof RBooleana)
+                System.out.println(tareas.get(i).getAccion() + ": " + ((RBooleana) tareas.get(i)).isDato());
+            else if (tareas.get(i) instanceof RMulChoice)
+                System.out.println(tareas.get(i).getAccion() + ": " + ((RMulChoice) tareas.get(i)).getDatOpcion());
+        }
+    }
+
     public String getEnfermedad() {
         return enfermedad;
     }
 
-    public ArrayList<Realizar> getArrayTareas() {
+    public void setEnfermedad(String enfermedad) {
+        this.enfermedad = enfermedad;
+    }
+
+    public void setDias(int dias) {
+        this.dias = dias;
+    }
+
+    public ArrayList<Realizar> getTareas() {
         return tareas;
+    }
+
+    public void setTareas(ArrayList<Realizar> tareas) {
+        this.tareas = tareas;
     }
 
     public int getDias() {
         return dias;
+    }
+
+    public LocalDate getHoy() {
+        return hoy;
+    }
+
+    public void setHoy(LocalDate hoy) {
+        this.hoy = hoy;
     }
 }

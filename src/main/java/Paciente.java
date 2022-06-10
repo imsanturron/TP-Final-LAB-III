@@ -1,4 +1,8 @@
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Paciente extends Usuario {
@@ -12,14 +16,24 @@ public class Paciente extends Usuario {
     private Profesional profesionalPropio;
     private boolean atendido = false;
     private String enfermedad;
-    private PlanDeControl planDeControl;
-    private LocalDate fIni;
-    private LocalDate fCompare;
-    private int comparadorFecha;
-    private LocalDate fFin;
-    private boolean alertaDeNoRealizacion = false;
-    /// HistorialMedico
+    private PlanDeControl planDeControl; ///clonar
 
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate fIni;
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate fCompare;
+
+    private int comparadorFecha;
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate fFin;
+
+    private boolean alertaDeNoRealizacion = false;
+    ArrayList<PlanDeControl> historialMedico = new ArrayList<>();
 
     public Paciente(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena,
                     String telefono, String enfermedad, Profesional profesionalPropio, String edad) {
@@ -28,13 +42,13 @@ public class Paciente extends Usuario {
         this.enfermedad = enfermedad;
     }
 
+    public void persistirDia(){
+        historialMedico.add(planDeControl); ///persistir paciente entero o como
+    }
     public void resetDatosDiaYAlertar() {
         alertaDeNoRealizacion = planDeControl.resetDia();
     }
 
-    public void setAtendido(boolean atendido) {
-        this.atendido = atendido;
-    }
 
     public void verTareasAHacer() {
         if (planDeControl != null)
@@ -55,6 +69,18 @@ public class Paciente extends Usuario {
             planDeControl.modificarAcciones();
         else
             System.out.println("Usted ya ha finzalizado su plan!");
+    }
+
+    public void resetPaciente() {
+    this.fCompare = null;
+    this.fFin = null;
+    this.fIni = null;
+    this.atendido  = false;
+    this.enfermedad = "";
+    this.planDeControl = null;
+    this.alertaDeNoRealizacion = false;
+    this.comparadorFecha = 0;
+    //this.profesionalPropio = null;
     }
 
     public UUID getMatriculaMedico() {
@@ -112,6 +138,38 @@ public class Paciente extends Usuario {
 
     public void setEnfermedad(String enfermedad) {
         this.enfermedad = enfermedad;
+    }
+
+    public Profesional getProfesionalPropio() {
+        return profesionalPropio;
+    }
+
+    public void setProfesionalPropio(Profesional profesionalPropio) {
+        this.profesionalPropio = profesionalPropio;
+    }
+
+    public int getComparadorFecha() {
+        return comparadorFecha;
+    }
+
+    public void setComparadorFecha(int comparadorFecha) {
+        this.comparadorFecha = comparadorFecha;
+    }
+
+    public void setAlertaDeNoRealizacion(boolean alertaDeNoRealizacion) {
+        this.alertaDeNoRealizacion = alertaDeNoRealizacion;
+    }
+
+    public void setAtendido(boolean atendido) {
+        this.atendido = atendido;
+    }
+
+    public ArrayList<PlanDeControl> getHistorialMedico() {
+        return historialMedico;
+    }
+
+    public void setHistorialMedico(ArrayList<PlanDeControl> historialMedico) {
+        this.historialMedico = historialMedico;
     }
 
     @Override
