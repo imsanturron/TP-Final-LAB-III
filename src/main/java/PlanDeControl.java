@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class PlanDeControl {
+public class PlanDeControl implements Cloneable {
     private String enfermedad;
     private int dias;
 
@@ -241,5 +241,16 @@ public class PlanDeControl {
 
     public void setHoy(LocalDate hoy) {
         this.hoy = hoy;
+    }
+
+    @Override
+    public PlanDeControl clone() {
+        try {
+            PlanDeControl clone = (PlanDeControl) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

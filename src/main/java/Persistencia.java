@@ -1,5 +1,8 @@
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.MapType;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,24 +31,26 @@ public class Persistencia {
         }
     }
 
-    public static <s, t> HashMap<s, t> DEserializeHashMap(String path) { ///ver si anda esto
+    public static <s, t> HashMap<s, t> DEserializeHashMap(String path, Class<s> elementKey, Class<t> elementValue) { ///ver si anda esto
         File file = new File(path);
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         HashMap<s, t> ret = null;
+        MapType hashtype = mapper.getTypeFactory().constructMapType(HashMap.class, elementKey, elementValue);
         try {
-            ret = mapper.readValue(file, new TypeReference<HashMap<s, t>>() {});
+            ret = mapper.readValue(file, hashtype);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return ret;
     }
 
-    public static <t> ArrayList<t> DEserializeArrayList(String path) {
+    public static <t> ArrayList<t> DEserializeArrayList(String path, Class<t> element) {
         File file = new File(path);
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         ArrayList<t> ret = new ArrayList<>();
+        CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, element);
         try {
-            ret = mapper.readValue(file, new TypeReference<ArrayList<t>>() {});
+            ret = mapper.readValue(file, listType);
         } catch (IOException e) {
             e.printStackTrace();
         }

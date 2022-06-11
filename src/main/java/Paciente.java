@@ -35,6 +35,10 @@ public class Paciente extends Usuario {
     private boolean alertaDeNoRealizacion = false;
     ArrayList<PlanDeControl> historialMedico = new ArrayList<>();
 
+    public Paciente(){
+        super();
+    }
+
     public Paciente(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena,
                     String telefono, String enfermedad, Profesional profesionalPropio, String edad) {
         super(nombreCompleto, tipoUsuario, DNI, contrasena, telefono, edad);
@@ -83,9 +87,7 @@ public class Paciente extends Usuario {
     //this.profesionalPropio = null;
     }
 
-    public UUID getMatriculaMedico() {
-        return profesionalPropio.getMatricula();
-    }
+
 
     public boolean isAtendido() {
         return atendido;

@@ -10,15 +10,17 @@ public class Profesional extends Usuario implements CrearTratamiento {
   -ControlPacientes
   -FinalizaroExtender
   -VerDatosPaciente(atributos, historial, etc)*/
-    private UUID matricula;
     Scanner scan = new Scanner(System.in);
     HashSet<Paciente> pacientesAAtender = new HashSet<>();
     ArrayList<Paciente> pacientesACargo = new ArrayList<>(); ///es buena para persistencia? o mejor hashmap de todos?
 
+    public Profesional(){
+        super();
+    }
+
     public Profesional(String nombreCompleto, TipoUsuario tipoUsuario, String DNI,
                        String contrasena, String telefono, String edad) {
         super(nombreCompleto, tipoUsuario, DNI, contrasena, telefono, edad);
-        matricula = UUID.randomUUID();
     }
 
     public void AlertaNoRealizacionAyerPacientes() {
@@ -57,7 +59,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
     public void verNuevosPacientes(HashMap<String, Paciente> pacientes, ArrayList<PlanDeControl> planes) {
         int nuevos = 0;
         for (Paciente pacientex : pacientes.values()) {
-            if (!pacientex.isAtendido() && matricula.equals(pacientex.getMatriculaMedico())) {
+            if (!pacientex.isAtendido() && DNI.equals(pacientex.getProfesionalPropio().getDNI())) {
                 System.out.println("Nombre:" + pacientex.getNombre() + "Enfermedad:" + pacientex.getEnfermedad()
                         + " DNI:" + pacientex.getDNI());
                 pacientesAAtender.add(pacientex);
@@ -141,8 +143,8 @@ public class Profesional extends Usuario implements CrearTratamiento {
             s_n = scan.next().charAt(0);
             scan.nextLine();
             if (s_n == 's' || s_n == 'S') {
-                ///hacer deep copy
-                pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(planes.get(i));
+                PlanDeControl cloned = (PlanDeControl) planes.get(i).clone();
+                pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(cloned);
                 pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
                 pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(planes.get(i).getDias()));
                 pacs.get(listaConver.get(0).getDNI()).setComparadorFecha(1);
@@ -250,10 +252,6 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 break;
             }
         }
-    }
-
-    public UUID getMatricula() {
-        return matricula;
     }
 
     public String getEdad() {

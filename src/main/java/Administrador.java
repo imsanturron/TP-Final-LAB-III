@@ -5,10 +5,13 @@ import java.util.Scanner;
 public class Administrador extends Usuario implements CrearTratamiento {
     Scanner scan = new Scanner(System.in);
 
+    public Administrador() {
+        super();
+    }
+
     public Administrador(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena
             , String telefono, String edad) {
         super(nombreCompleto, tipoUsuario, DNI, contrasena, telefono, edad);
-
     }
 
     public void ingresoPaciente(HashMap<String, Paciente> pacientes, HashMap<String, Profesional> profesionales
