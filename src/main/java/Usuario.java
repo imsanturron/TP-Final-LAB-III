@@ -8,6 +8,10 @@ public class Usuario {
     protected String telefono;
     protected boolean altaDeUsuario = false; ///para que quede guardado
 
+    public Usuario(){
+
+    }
+
     public Usuario(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena,
                    String telefono, String edad) {
         this.nombreCompleto = nombreCompleto;

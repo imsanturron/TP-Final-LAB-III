@@ -18,10 +18,9 @@ public class Sistema {
         int option;
 
         do {
-            //serializacion y deserializacion testeada.
-            usuariosDelSistema = Persistencia.DEserializeHashMap(Archivos.USUARIOSALL.getPath());
-            planesDeControl = Persistencia.DEserializeArrayList(Archivos.PLANESPREDET.getPath());
-            enfermedades = Persistencia.DEserializeArrayList(Archivos.ENFERMEDADESALL.getPath());
+            usuariosDelSistema = Persistencia.DEserializeHashMap(Archivos.USUARIOSALL.getPath(), String.class, Usuario.class);
+            planesDeControl = Persistencia.DEserializeArrayList(Archivos.PLANESPREDET.getPath(), PlanDeControl.class);
+            enfermedades = Persistencia.DEserializeArrayList(Archivos.ENFERMEDADESALL.getPath(), String.class);
             String user, contrasena;
             System.out.println("usuario(dni): ");
             user = sc.nextLine();
@@ -48,9 +47,9 @@ public class Sistema {
 
                 switch (us.tipoUsuario) {
                     case ADMINISTRADOR: {
-                        administradores = Persistencia.DEserializeHashMap(Archivos.ADMINISTRADORESALL.getPath());
-                        pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath());
-                        profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath());
+                        administradores = Persistencia.DEserializeHashMap(Archivos.ADMINISTRADORESALL.getPath(), String.class, Administrador.class);
+                        pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
+                        profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
                         System.out.println("Administrador");
                         Administrador admin = (Administrador) us;
                         for (String clave : administradores.keySet()) {
@@ -105,8 +104,8 @@ public class Sistema {
                     break;
 
                     case PACIENTE: {
-                        pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath());
-                        profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath());
+                        pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
+                        profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
                         System.out.println("Paciente");
                         Paciente paciente = (Paciente) us;
                         for (String clave : pacientes.keySet()) {
@@ -165,9 +164,9 @@ public class Sistema {
                     break;
 
                     case PROFESIONAL: {
-                        administradores = Persistencia.DEserializeHashMap(Archivos.ADMINISTRADORESALL.getPath());
-                        pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath());
-                        profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath());
+                        administradores = Persistencia.DEserializeHashMap(Archivos.ADMINISTRADORESALL.getPath(), String.class, Administrador.class);
+                        pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
+                        profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
                         System.out.println("profesional");
                         /***
                          *ControlPacientes
