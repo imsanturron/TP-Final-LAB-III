@@ -14,7 +14,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
     HashSet<Paciente> pacientesAAtender = new HashSet<>();
     ArrayList<Paciente> pacientesACargo = new ArrayList<>(); ///es buena para persistencia? o mejor hashmap de todos?
 
-    public Profesional(){
+    public Profesional() {
         super();
     }
 
@@ -60,8 +60,8 @@ public class Profesional extends Usuario implements CrearTratamiento {
         int nuevos = 0;
         for (Paciente pacientex : pacientes.values()) {
             if (!pacientex.isAtendido() && DNI.equals(pacientex.getProfesionalPropio().getDNI())) {
-                System.out.println("Nombre:" + pacientex.getNombre() + "Enfermedad:" + pacientex.getEnfermedad()
-                        + " DNI:" + pacientex.getDNI());
+                System.out.println("Nombre:" + pacientex.getNombre() + "  -  Enfermedad:" + pacientex.getEnfermedad()
+                        + "  -  DNI:" + pacientex.getDNI());
                 pacientesAAtender.add(pacientex);
                 nuevos++;
             }
@@ -87,7 +87,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
         List<Paciente> listaConver = new ArrayList<>(pacientesAAtender);
 
         while (!pacientesAAtender.isEmpty() && (s_n == 's' || s_n == 'S')) {
-            System.out.println(listaConver.get(0).nombreCompleto + "  enferemdad:" + listaConver.get(0).getEnfermedad());
+            System.out.println("\nNombre:" + listaConver.get(0).nombreCompleto + "   Enferemdad:" + listaConver.get(0).getEnfermedad());
 
             System.out.println("Que desea?\n 1:Asignar (o ver) plan predeterminado    2:Modificar (o ver) plan predeterminado" +
                     "    3: Crear plan nuevo     0:Salir");
@@ -99,20 +99,26 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 case 1:
                     satisfactorio = asignarPredet(pacs, planes, i);
                     if (satisfactorio) {
+                        System.out.println("plan satisfactoriamente asignado.");
                         pacientesACargo.add(listaConver.get(0));
+                        listaConver.get(0).setAtendido(true);
                         listaConver.remove(0);
                     }
                     break;
                 case 2:
                     satisfactorio = modificarPredetYAsignar(pacs, planes, i);
                     if (satisfactorio) {
+                        System.out.println("plan satisfactoriamente asignado.");
                         pacientesACargo.add(listaConver.get(0));
+                        listaConver.get(0).setAtendido(true);
                         listaConver.remove(0);
                     }
                     break;
                 case 3:
                     crearTratamiento(pacs, planes);
+                    System.out.println("plan satisfactoriamente asignado.");
                     pacientesACargo.add(listaConver.get(0));
+                    listaConver.get(0).setAtendido(true);
                     listaConver.remove(0);
                     break;
             }

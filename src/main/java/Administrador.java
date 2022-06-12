@@ -15,7 +15,10 @@ public class Administrador extends Usuario implements CrearTratamiento {
     }
 
     public void ingresoPaciente(HashMap<String, Paciente> pacientes, HashMap<String, Profesional> profesionales
-            , HashMap<String, Usuario> usuarios) {///lista
+            , HashMap<String, Usuario> usuarios, ArrayList<String> enfermedades) {///lista
+
+        int i = 0;
+
         System.out.println("ingrese DNI del paciente:");
         String dni = scan.nextLine();
         System.out.println("ingrese el nombre del paciente:");
@@ -26,6 +29,16 @@ public class Administrador extends Usuario implements CrearTratamiento {
         String edadd = scan.nextLine();
         System.out.println("que enfermedad posee?");
         String enfmd = scan.nextLine();
+
+        while (i < enfermedades.size()) {
+            if (enfermedades.get(i).equalsIgnoreCase(enfmd))
+                i = enfermedades.size();
+            else
+                i++;
+        }
+
+        if (i == enfermedades.size())
+            enfermedades.add(enfmd);
 
         Profesional asignarPro = asignarProfesional(profesionales);
 

@@ -3,6 +3,10 @@ import java.util.Scanner;
 public class RBooleana extends Realizar {
     private boolean dato = false;
 
+    public RBooleana(){
+        super();
+    }
+
     public RBooleana(String accion, String msjEspecifico) {
         super(accion, msjEspecifico);
     }

@@ -15,6 +15,9 @@ public class PlanDeControl implements Cloneable {
     private ArrayList<Realizar> tareas = new ArrayList<>();
     private Scanner scan = new Scanner(System.in);
 
+    public PlanDeControl(){
+    }
+
     public PlanDeControl(String enfermedad, int dias) {
         this.enfermedad = enfermedad;
         this.dias = dias;
@@ -27,7 +30,7 @@ public class PlanDeControl implements Cloneable {
         String accion, especificaciones;
 
         while (opcion != 0) {
-            System.out.println("Que desea agregar? Agregue las tareas en orden de realizacion");
+            System.out.println("Que tareas desea agregar al plan? Agregue las tareas en orden de realizacion");
             System.out.println("  1:Tarea de entrada numerica    ---    2:Tarea binaria de entrada 'si/no'");
             System.out.println("  3:Tarea de entrada de texto    ---    4:Tarea de entrada tipo multiple choice    ----    0:Salir");
             opcion = scan.nextInt();

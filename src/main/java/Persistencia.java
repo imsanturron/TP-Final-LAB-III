@@ -34,7 +34,7 @@ public class Persistencia {
     public static <s, t> HashMap<s, t> DEserializeHashMap(String path, Class<s> elementKey, Class<t> elementValue) { ///ver si anda esto
         File file = new File(path);
         ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        HashMap<s, t> ret = null;
+        HashMap<s, t> ret = new HashMap<>();
         MapType hashtype = mapper.getTypeFactory().constructMapType(HashMap.class, elementKey, elementValue);
         try {
             ret = mapper.readValue(file, hashtype);

@@ -3,6 +3,9 @@ public class Realizar {
     protected String msjEspecifico;
     protected boolean hecho = false;
 
+    public Realizar() {
+    }
+
     public Realizar(String accion, String msjEspecifico) {
         this.accion = accion;
         this.msjEspecifico = msjEspecifico;

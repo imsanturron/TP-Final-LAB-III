@@ -38,11 +38,13 @@ public class Sistema {
                         String contra = sc.nextLine();
                         if (contra.length() < 4)
                             System.out.println("Su contraseña debe ser mayor a 3 caracteres");
-                        else if (us.getContrasena().equalsIgnoreCase(us.getDNI()))
+                        else if (contra.equalsIgnoreCase(us.getDNI()))
                             System.out.println("Su contraseña no puede ser su DNI!");
                         else
                             us.setContrasena(contra);
-                    } while (!us.getContrasena().equalsIgnoreCase(us.getDNI()) && us.getContrasena().length() > 3);
+                    } while (us.getContrasena().equalsIgnoreCase(us.getDNI()) || us.getContrasena().length() < 4);
+
+                    Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
                 }
 
                 switch (us.tipoUsuario) {
@@ -51,9 +53,10 @@ public class Sistema {
                         pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
                         profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
                         System.out.println("Administrador");
-                        Administrador admin = (Administrador) us;
+                        //Administrador admin = (Administrador) us;
+                        Administrador admin = new Administrador();
                         for (String clave : administradores.keySet()) {
-                            if (admin.getDNI().equals(clave))
+                            if (us.getDNI().equals(clave))
                                 admin = administradores.get(clave);
                         }
                         System.out.println("Bienvenido " + admin.getNombreCompleto());
@@ -61,8 +64,8 @@ public class Sistema {
                         do {
                             System.out.println("que desea hacer?");
                             System.out.println("0:Salir  ---  1:Ingreso de paciente  ---  2:Ingreso de profesional");
-                            System.out.println("3:Regsitro de administradores  ---  4:Agregar enfermedad");
-                            System.out.println("5:Crear plan predeterminado  ---  6:Ingreso de profesional");
+                            System.out.println("3:Registro de administradores  ---  4:Agregar enfermedad");
+                            System.out.println("5:Crear plan predeterminado");
                             option = sc.nextInt();
                             sc.nextLine();
 
@@ -72,9 +75,10 @@ public class Sistema {
                                     rta = 'n';
                                 }
                                 case 1 -> {
-                                    admin.ingresoPaciente(pacientes, profesionales, usuariosDelSistema);
+                                    admin.ingresoPaciente(pacientes, profesionales, usuariosDelSistema, enfermedades);
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
+                                    Persistencia.serializeArrayList(enfermedades, Archivos.ENFERMEDADESALL.getPath());
                                 }
                                 case 2 -> {
                                     admin.ingresoProfesional(profesionales, usuariosDelSistema);
@@ -107,9 +111,9 @@ public class Sistema {
                         pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
                         profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
                         System.out.println("Paciente");
-                        Paciente paciente = (Paciente) us;
+                        Paciente paciente = new Paciente();
                         for (String clave : pacientes.keySet()) {
-                            if (paciente.getDNI().equals(clave))
+                            if (us.getDNI().equals(clave))
                                 paciente = pacientes.get(clave);
                         }
 
@@ -173,11 +177,12 @@ public class Sistema {
                          *VerDatosPaciente(atributos, historial, etc)
                          *LlamadoAyudaSistema
                          * **/
-                        Profesional profesional = (Profesional) us;
+                        Profesional profesional = new Profesional();
                         for (String clave : profesionales.keySet()) {
-                            if (profesional.getDNI().equals(clave))
+                            if (us.getDNI().equals(clave))
                                 profesional = profesionales.get(clave);
                         }
+
                         profesional.AlertaNoRealizacionAyerPacientes();
 
                         do {

@@ -4,6 +4,10 @@ public class RNumerica extends Realizar{
     private float dato = -9999;
     private Scanner scan = new Scanner(System.in);
 
+    public RNumerica(){
+    super();
+    }
+
     public RNumerica(String accion, String msjEspecifico) {
         super(accion, msjEspecifico);
     }

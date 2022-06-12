@@ -3,6 +3,10 @@ import java.util.Scanner;
 public class RTexto extends Realizar {
     private String dato= "";
 
+    public RTexto(){
+        super();
+    }
+
     public RTexto(String accion, String msjEspecifico) {
         super(accion, msjEspecifico);
     }

@@ -4,6 +4,9 @@ public class RMulChoice extends Realizar {
 
     private String datOpcion;
 
+    public RMulChoice() {
+    }
+
     public RMulChoice(String accion, String msjEspecifico) {
         super(accion, msjEspecifico);
         datOpcion = "sin ingresar";
