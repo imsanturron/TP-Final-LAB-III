@@ -1,7 +1,11 @@
 import java.io.File;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.time.temporal.ChronoUnit;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Sistema {
 
@@ -17,7 +21,13 @@ public class Sistema {
         char rta = 'n';
         int option;
 
-        do {
+        do {/*
+            Administrador admmm = new Administrador("admin master", TipoUsuario.ADMINISTRADOR, "9999", "10", "0", "0");
+            usuariosDelSistema.put("9999", admmm);
+            administradores.put("9999", admmm);
+            Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
+            Persistencia.serializeHashMap(administradores, Archivos.ADMINISTRADORESALL.getPath());
+*/
             usuariosDelSistema = Persistencia.DEserializeHashMap(Archivos.USUARIOSALL.getPath(), String.class, Usuario.class);
             planesDeControl = Persistencia.DEserializeArrayList(Archivos.PLANESPREDET.getPath(), PlanDeControl.class);
             enfermedades = Persistencia.DEserializeArrayList(Archivos.ENFERMEDADESALL.getPath(), String.class);
@@ -116,12 +126,13 @@ public class Sistema {
                             if (us.getDNI().equals(clave))
                                 paciente = pacientes.get(clave);
                         }
+                        long diasEntre;
 
                         if (paciente.getfIni() != null) {
                             paciente.setfCompare(LocalDate.now());
-                            Duration d = Duration.between(paciente.getfIni(), paciente.getfCompare());
+                            diasEntre = DAYS.between(paciente.getfIni(), paciente.getfCompare());
 
-                            if (d.toDays() == paciente.getComparadorFecha()) {
+                            if (diasEntre == paciente.getComparadorFecha()) {
                                 paciente.getPlanDeControl().infoTareasDiaX();
                                 paciente.persistirDia();
                                 Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
@@ -190,6 +201,7 @@ public class Sistema {
                             System.out.println("0:Salir  ---  1:ver informaciones de tareas de ayer de los pacientes ");
                             System.out.println("2:ver nuevos pacientes a atender  ---  3:asignar planes");
                             System.out.println("4:Seleccionar paciente a atender  ---  5:extender plan  ---  6:finalizar plan");
+                            System.out.println("7:Pacientes vistos en espera");
                             option = sc.nextInt();
                             sc.nextLine();
                             switch (option) {
@@ -222,6 +234,9 @@ public class Sistema {
                                     profesional.finalizarPlan();
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+                                }
+                                case 7 -> {
+                                    profesional.pacientesVistosEnEspera();
                                 }
                                 default -> System.out.println("opcion inexistente");
                             }

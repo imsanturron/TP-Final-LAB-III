@@ -130,6 +130,7 @@ public class PlanDeControl implements Cloneable {
             else if (tareas.get(i) instanceof RMulChoice)
                 ((RMulChoice) tareas.get(i)).ingresarOpcionMultiple();
 
+            i++;
             System.out.println("desea seguir ingresando?");
             seguir = scan.next().charAt(0);
             scan.nextLine();
@@ -137,7 +138,7 @@ public class PlanDeControl implements Cloneable {
     }
 
     public void modificarAcciones() {
-        int i = 0, opcion;
+        int i = 0, opcion=-1;
         char seguir = 's';
         System.out.println("Que accion desea modificar?");
         while (seguir == 's' || seguir == 'S') {

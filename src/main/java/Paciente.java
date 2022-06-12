@@ -15,6 +15,7 @@ public class Paciente extends Usuario {
 -CompletarAccionesDeHoy(y modificar)*/
     private Profesional profesionalPropio;
     private boolean atendido = false;
+    private boolean visto = false;
     private String enfermedad;
     private PlanDeControl planDeControl; ///clonar
 
@@ -172,6 +173,14 @@ public class Paciente extends Usuario {
 
     public void setHistorialMedico(ArrayList<PlanDeControl> historialMedico) {
         this.historialMedico = historialMedico;
+    }
+
+    public boolean isVisto() {
+        return visto;
+    }
+
+    public void setVisto(boolean visto) {
+        this.visto = visto;
     }
 
     @Override

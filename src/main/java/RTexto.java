@@ -25,4 +25,6 @@ public class RTexto extends Realizar {
     public void setDato(String dato) {
         this.dato = dato;
     }
+
+
 }

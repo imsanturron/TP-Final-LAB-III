@@ -48,4 +48,5 @@ public class RMulChoice extends Realizar {
     public void setDatOpcion(String datOpcion) {
         this.datOpcion = datOpcion;
     }
+
 }

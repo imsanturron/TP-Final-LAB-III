@@ -44,7 +44,11 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
                 for (Paciente pacientex : pacientesACargo) {
                     if (pacientex.getDNI().equals(dni)) {
-                        pacientex.getHistorialMedico().get(pacientex.getHistorialMedico().size() - 1).infoTareasDiaX();
+                        if (pacientex.getHistorialMedico().size() >= 1)
+                            pacientex.getHistorialMedico().get(pacientex.getHistorialMedico().size() - 1).infoTareasDiaX();
+                        else
+                            System.out.println("Este paciente no posee historial medico actualmente.");
+
                         break;
                     }
                 }
@@ -59,9 +63,10 @@ public class Profesional extends Usuario implements CrearTratamiento {
     public void verNuevosPacientes(HashMap<String, Paciente> pacientes, ArrayList<PlanDeControl> planes) {
         int nuevos = 0;
         for (Paciente pacientex : pacientes.values()) {
-            if (!pacientex.isAtendido() && DNI.equals(pacientex.getProfesionalPropio().getDNI())) {
+            if (!pacientex.isVisto() && DNI.equals(pacientex.getProfesionalPropio().getDNI())) {
                 System.out.println("Nombre:" + pacientex.getNombre() + "  -  Enfermedad:" + pacientex.getEnfermedad()
                         + "  -  DNI:" + pacientex.getDNI());
+                pacientex.setVisto(true);
                 pacientesAAtender.add(pacientex);
                 nuevos++;
             }
@@ -76,6 +81,20 @@ public class Profesional extends Usuario implements CrearTratamiento {
                     asignarPlan(pacientes, planes);
             } catch (InputMismatchException e) {
                 System.out.println("Debiste ingresar un caracter");
+            }
+        }
+    }
+
+    public void pacientesVistosEnEspera() {
+        char opcion;
+        System.out.println("Tienes " + pacientesAAtender.size() + " pacientes en espera");
+        if (pacientesAAtender.size() > 0) {
+            System.out.println("Ver informacion de cada uno? s/n");
+            opcion = scan.next().charAt(0);
+            scan.nextLine();
+
+            if (opcion == 's' || opcion == 'S') {
+                System.out.println(pacientesAAtender);
             }
         }
     }
@@ -95,12 +114,23 @@ public class Profesional extends Usuario implements CrearTratamiento {
             scan.nextLine();
             i = 0;
 
+            /*
+            listaConver.remove(2);
+            listaConver.remove(1);
+            listaConver.remove(0);
+            /*System.out.println("get 2:  "+listaConver.remove(2));
+            System.out.println("get 1:  "+listaConver.remove(1));
+            System.out.println("get 0:  "+listaConver.remove(0));
+            */
+
+
             switch (opcion) {
                 case 1:
                     satisfactorio = asignarPredet(pacs, planes, i);
                     if (satisfactorio) {
                         System.out.println("plan satisfactoriamente asignado.");
                         pacientesACargo.add(listaConver.get(0));
+                        listaConver.get(0).setAtendido(true);
                         listaConver.get(0).setAtendido(true);
                         listaConver.remove(0);
                     }

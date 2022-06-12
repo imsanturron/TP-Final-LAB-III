@@ -23,11 +23,24 @@ public class Realizar {
         this.hecho = hecho;
     }
 
+
+    public void setAccion(String accion) {
+        this.accion = accion;
+    }
+
+    public String getMsjEspecifico() {
+        return msjEspecifico;
+    }
+
+    public void setMsjEspecifico(String msjEspecifico) {
+        this.msjEspecifico = msjEspecifico;
+    }
+
     @Override
     public String toString() {
-        return "Realizar{" +
+        return "Realizar{  " +
                 "Tarea:'" + accion + '\'' +
-                ", Especificacion:'" + msjEspecifico + '\'' +
+                ",  Especificacion/es:'" + msjEspecifico + '\'' +
                 '}';
     }
 }

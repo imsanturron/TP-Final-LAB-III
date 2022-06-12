@@ -27,4 +27,8 @@ public class RNumerica extends Realizar{
     public void setDato(int dato) {
         this.dato = dato;
     }
+
+    public void setDato(float dato) {
+        this.dato = dato;
+    }
 }
