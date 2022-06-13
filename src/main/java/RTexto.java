@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
 public class RTexto extends Realizar {
-    private String dato= "";
+    private String dato = "";
 
-    public RTexto(){
+    public RTexto() {
         super();
     }
 
@@ -13,8 +13,8 @@ public class RTexto extends Realizar {
 
     public void ingresarString() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Ingrese su respuesta: ");
-        dato= scan.nextLine();
+        System.out.println("Ingrese su respuesta de texto (accion:" + accion + "):");
+        dato = scan.nextLine();
         hecho = true;
     }
 

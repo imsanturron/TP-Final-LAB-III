@@ -15,7 +15,7 @@ public class PlanDeControl implements Cloneable {
     private ArrayList<Realizar> tareas = new ArrayList<>();
     private Scanner scan = new Scanner(System.in);
 
-    public PlanDeControl(){
+    public PlanDeControl() {
     }
 
     public PlanDeControl(String enfermedad, int dias) {
@@ -120,30 +120,34 @@ public class PlanDeControl implements Cloneable {
     public void completarAcciones() {
         char seguir = 's';
         int i = 0;
-        while (i < tareas.size() && !tareas.get(i).isHecho() && (seguir == 's' || seguir == 'S')) { ///protected me sugiere atributo??????
-            if (tareas.get(i) instanceof RNumerica)
-                ((RNumerica) tareas.get(i)).ingresarNum();
-            else if (tareas.get(i) instanceof RTexto)
-                ((RTexto) tareas.get(i)).ingresarString();
-            else if (tareas.get(i) instanceof RBooleana)
-                ((RBooleana) tareas.get(i)).ingresarSN();
-            else if (tareas.get(i) instanceof RMulChoice)
-                ((RMulChoice) tareas.get(i)).ingresarOpcionMultiple();
+        while (i < tareas.size() && (seguir == 's' || seguir == 'S')) { ///protected me sugiere atributo??????
+            if (!tareas.get(i).isHecho()) {
+                if (tareas.get(i) instanceof RNumerica)
+                    ((RNumerica) tareas.get(i)).ingresarNum();
+                else if (tareas.get(i) instanceof RTexto)
+                    ((RTexto) tareas.get(i)).ingresarString();
+                else if (tareas.get(i) instanceof RBooleana)
+                    ((RBooleana) tareas.get(i)).ingresarSN();
+                else if (tareas.get(i) instanceof RMulChoice)
+                    ((RMulChoice) tareas.get(i)).ingresarOpcionMultiple();
 
+                System.out.println("desea seguir ingresando?s/n");
+                seguir = scan.next().charAt(0);
+                scan.nextLine();
+            }
             i++;
-            System.out.println("desea seguir ingresando?");
-            seguir = scan.next().charAt(0);
-            scan.nextLine();
         }
+        if (i == tareas.size())
+            System.out.println("Ya completo todas sus tareas");
     }
 
     public void modificarAcciones() {
-        int i = 0, opcion=-1;
+        int i = 0, opcion;
         char seguir = 's';
         System.out.println("Que accion desea modificar?");
         while (seguir == 's' || seguir == 'S') {
             while (i < tareas.size()) {
-                System.out.println(i + ": " + tareas.get(i).getAccion());
+                System.out.println((i + 1) + ": " + tareas.get(i).getAccion());
                 i++;
             }
 
@@ -151,15 +155,15 @@ public class PlanDeControl implements Cloneable {
             opcion = scan.nextInt();
             scan.nextLine();
 
-            if (opcion < tareas.size()) {
-                if (tareas.get(opcion) instanceof RNumerica)
-                    ((RNumerica) tareas.get(opcion)).ingresarNum();
-                else if (tareas.get(opcion) instanceof RTexto)
-                    ((RTexto) tareas.get(opcion)).ingresarString();
-                else if (tareas.get(opcion) instanceof RBooleana)
+            if (opcion - 1 < tareas.size()) {
+                if (tareas.get(opcion - 1) instanceof RNumerica)
+                    ((RNumerica) tareas.get(opcion - 1)).ingresarNum();
+                else if (tareas.get(opcion - 1) instanceof RTexto)
+                    ((RTexto) tareas.get(opcion - 1)).ingresarString();
+                else if (tareas.get(opcion - 1) instanceof RBooleana)
                     ((RBooleana) tareas.get(opcion)).ingresarSN();
-                else if (tareas.get(opcion) instanceof RMulChoice)
-                    ((RMulChoice) tareas.get(opcion)).ingresarOpcionMultiple();
+                else if (tareas.get(opcion - 1) instanceof RMulChoice)
+                    ((RMulChoice) tareas.get(opcion - 1)).ingresarOpcionMultiple();
             } else
                 System.out.println("Numero no disponible!");
 

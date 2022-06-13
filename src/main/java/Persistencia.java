@@ -15,13 +15,8 @@ import java.util.HashMap;
 public class Persistencia {
 
     public static <s, t> void serializeHashMap(HashMap<s, t> hashMap, String path) { ///o string path
-        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-                .allowIfSubType("com.baeldung.jackson.inheritance")
-                .allowIfSubType("java.util.HashMap").build();
-
         File file = new File(path);
         ObjectMapper mapper = new ObjectMapper();
-        mapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
         try {
             mapper.writeValue(file, hashMap);
         } catch (IOException e) {
@@ -30,13 +25,8 @@ public class Persistencia {
     }
 
     public static <t> void serializeArrayList(ArrayList<t> arrayList, String path) { ///o string path
-        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-                .allowIfSubType("com.baeldung.jackson.inheritance")
-                .allowIfSubType("java.util.ArrayList").build();
-
         File file = new File(path);
         ObjectMapper mapper = new ObjectMapper();
-        mapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
         try {
             mapper.writeValue(file, arrayList);
         } catch (IOException e) {

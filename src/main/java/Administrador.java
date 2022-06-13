@@ -33,8 +33,8 @@ public class Administrador extends Usuario implements CrearTratamiento {
         while (i < enfermedades.size()) {
             if (enfermedades.get(i).equalsIgnoreCase(enfmd))
                 i = enfermedades.size();
-            else
-                i++;
+
+            i++;
         }
 
         if (i == enfermedades.size())

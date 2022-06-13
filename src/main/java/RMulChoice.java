@@ -15,7 +15,7 @@ public class RMulChoice extends Realizar {
     public void ingresarOpcionMultiple() {
         Scanner scan = new Scanner(System.in);
         int option;
-        System.out.println("Ingrese como lo/se siente a continuacion:  " +
+        System.out.println("Ingrese como lo/se siente a continuacion (accion:" + accion + ") :" +
                 "1:Optimo       2:Casi en buen estado          3:Mal            4:Pesimo");
         do {
             option = scan.nextInt();

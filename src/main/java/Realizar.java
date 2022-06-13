@@ -1,3 +1,16 @@
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = RNumerica.class, name = "RNumerica"),
+        @JsonSubTypes.Type(value = RBooleana.class, name = "RBooleana"),
+        @JsonSubTypes.Type(value = RTexto.class, name = "RTexto"),
+        @JsonSubTypes.Type(value = RMulChoice.class, name = "RMulChoice")
+})
 public class Realizar {
     protected String accion;
     protected String msjEspecifico;
