@@ -3,7 +3,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Paciente extends Usuario {
     /*fechas
@@ -78,7 +77,7 @@ public class Paciente extends Usuario {
 
     public void resetPaciente() {
     this.fCompare = null;
-    this.fFin = null;
+    fFin = null;
     this.fIni = null;
     this.atendido  = false;
     this.enfermedad = "";

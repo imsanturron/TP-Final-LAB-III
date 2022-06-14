@@ -9,14 +9,13 @@ public class Administrador extends Usuario implements CrearTratamiento {
         super();
     }
 
-    public Administrador(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena
-            , String telefono, String edad) {
+    public Administrador(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena,
+                         String telefono, String edad) {
         super(nombreCompleto, tipoUsuario, DNI, contrasena, telefono, edad);
     }
 
-    public void ingresoPaciente(HashMap<String, Paciente> pacientes, HashMap<String, Profesional> profesionales
-            , HashMap<String, Usuario> usuarios, ArrayList<String> enfermedades) {///lista
-
+    public void ingresoPaciente(HashMap<String, Paciente> pacientes, HashMap<String, Profesional> profesionales,
+                                HashMap<String, Usuario> usuarios, ArrayList<String> enfermedades) {///lista
         int i = 0;
 
         System.out.println("ingrese DNI del paciente:");
@@ -32,12 +31,12 @@ public class Administrador extends Usuario implements CrearTratamiento {
 
         while (i < enfermedades.size()) {
             if (enfermedades.get(i).equalsIgnoreCase(enfmd))
-                i = enfermedades.size();
+                i = enfermedades.size() + 1;
 
             i++;
         }
 
-        if (i == enfermedades.size())
+        if (i == enfermedades.size() + 1)
             enfermedades.add(enfmd);
 
         Profesional asignarPro = asignarProfesional(profesionales);
@@ -124,14 +123,10 @@ public class Administrador extends Usuario implements CrearTratamiento {
 
     public void agregarEnfermedad(ArrayList<String> enfermedades) {
         System.out.println("ingrese la enfermedad a agregar:");
-        enfermedades.add(scan.nextLine());
+        String enfmd = scan.nextLine();
+        if (!enfermedades.contains(enfmd))
+            enfermedades.add(enfmd);
     }
-
-    public void borrarEnfermedad(ArrayList<String> enfermedades) {
-        System.out.println("ingrese la enfermedad a borrar:");
-        ///borrar
-    }
-
 
 
 /*    *fechas

@@ -114,16 +114,6 @@ public class Profesional extends Usuario implements CrearTratamiento {
             scan.nextLine();
             i = 0;
 
-            /*
-            listaConver.remove(2);
-            listaConver.remove(1);
-            listaConver.remove(0);
-            /*System.out.println("get 2:  "+listaConver.remove(2));
-            System.out.println("get 1:  "+listaConver.remove(1));
-            System.out.println("get 0:  "+listaConver.remove(0));
-            */
-
-
             switch (opcion) {
                 case 1:
                     satisfactorio = asignarPredet(pacs, planes, i);
@@ -256,11 +246,11 @@ public class Profesional extends Usuario implements CrearTratamiento {
         String dni = scan.nextLine();
 
         for (Paciente paciente : listaConver) {
-            if (paciente.getDNI().equals(dni)) {
+            if (paciente.getDNI().equalsIgnoreCase(dni)) {
                 paciente.resetPaciente();
 
                 for (int z = 0; z < pacientesACargo.size(); z++) {
-                    if (pacientesACargo.get(z).getDNI().equals(dni)) {
+                    if (pacientesACargo.get(z).getDNI().equalsIgnoreCase(dni)) {
                         pacientesACargo.remove(z);
                         break;
                     }

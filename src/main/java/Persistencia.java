@@ -1,8 +1,5 @@
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapType;
 
@@ -42,7 +39,8 @@ public class Persistencia {
         try {
             ret = mapper.readValue(file, hashtype);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("El archivo JSON actualmente esta vacio.");
+            //e.printStackTrace();
         }
         return ret;
     }
@@ -55,7 +53,8 @@ public class Persistencia {
         try {
             ret = mapper.readValue(file, listType);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("El archivo JSON actualmente esta vacio.");
+            //e.printStackTrace();
         }
         return ret;
     }
