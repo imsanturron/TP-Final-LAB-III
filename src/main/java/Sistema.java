@@ -1,7 +1,7 @@
-import java.io.File;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Sistema {
 
@@ -17,7 +17,13 @@ public class Sistema {
         char rta = 'n';
         int option;
 
-        do {
+        do {/*
+            Administrador admmm = new Administrador("admin master", TipoUsuario.ADMINISTRADOR, "9999", "10", "0", "0");
+            usuariosDelSistema.put("9999", admmm);
+            administradores.put("9999", admmm);
+            Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
+            Persistencia.serializeHashMap(administradores, Archivos.ADMINISTRADORESALL.getPath());
+*/
             usuariosDelSistema = Persistencia.DEserializeHashMap(Archivos.USUARIOSALL.getPath(), String.class, Usuario.class);
             planesDeControl = Persistencia.DEserializeArrayList(Archivos.PLANESPREDET.getPath(), PlanDeControl.class);
             enfermedades = Persistencia.DEserializeArrayList(Archivos.ENFERMEDADESALL.getPath(), String.class);
@@ -38,11 +44,13 @@ public class Sistema {
                         String contra = sc.nextLine();
                         if (contra.length() < 4)
                             System.out.println("Su contraseña debe ser mayor a 3 caracteres");
-                        else if (us.getContrasena().equalsIgnoreCase(us.getDNI()))
+                        else if (contra.equalsIgnoreCase(us.getDNI()))
                             System.out.println("Su contraseña no puede ser su DNI!");
                         else
                             us.setContrasena(contra);
-                    } while (!us.getContrasena().equalsIgnoreCase(us.getDNI()) && us.getContrasena().length() > 3);
+                    } while (us.getContrasena().equalsIgnoreCase(us.getDNI()) || us.getContrasena().length() < 4);
+
+                    Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
                 }
 
                 switch (us.tipoUsuario) {
@@ -51,9 +59,10 @@ public class Sistema {
                         pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
                         profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
                         System.out.println("Administrador");
-                        Administrador admin = (Administrador) us;
+                        //Administrador admin = (Administrador) us;
+                        Administrador admin = new Administrador();
                         for (String clave : administradores.keySet()) {
-                            if (admin.getDNI().equals(clave))
+                            if (us.getDNI().equals(clave))
                                 admin = administradores.get(clave);
                         }
                         System.out.println("Bienvenido " + admin.getNombreCompleto());
@@ -61,8 +70,8 @@ public class Sistema {
                         do {
                             System.out.println("que desea hacer?");
                             System.out.println("0:Salir  ---  1:Ingreso de paciente  ---  2:Ingreso de profesional");
-                            System.out.println("3:Regsitro de administradores  ---  4:Agregar enfermedad");
-                            System.out.println("5:Crear plan predeterminado  ---  6:Ingreso de profesional");
+                            System.out.println("3:Registro de administradores  ---  4:Agregar enfermedad");
+                            System.out.println("5:Crear plan predeterminado");
                             option = sc.nextInt();
                             sc.nextLine();
 
@@ -72,9 +81,10 @@ public class Sistema {
                                     rta = 'n';
                                 }
                                 case 1 -> {
-                                    admin.ingresoPaciente(pacientes, profesionales, usuariosDelSistema);
+                                    admin.ingresoPaciente(pacientes, profesionales, usuariosDelSistema, enfermedades);
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
+                                    Persistencia.serializeArrayList(enfermedades, Archivos.ENFERMEDADESALL.getPath());
                                 }
                                 case 2 -> {
                                     admin.ingresoProfesional(profesionales, usuariosDelSistema);
@@ -107,17 +117,18 @@ public class Sistema {
                         pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
                         profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
                         System.out.println("Paciente");
-                        Paciente paciente = (Paciente) us;
+                        Paciente paciente = new Paciente();
                         for (String clave : pacientes.keySet()) {
-                            if (paciente.getDNI().equals(clave))
+                            if (us.getDNI().equals(clave))
                                 paciente = pacientes.get(clave);
                         }
+                        long diasEntre;
 
                         if (paciente.getfIni() != null) {
                             paciente.setfCompare(LocalDate.now());
-                            Duration d = Duration.between(paciente.getfIni(), paciente.getfCompare());
+                            diasEntre = DAYS.between(paciente.getfIni(), paciente.getfCompare());
 
-                            if (d.toDays() == paciente.getComparadorFecha()) {
+                            if (diasEntre == paciente.getComparadorFecha()) {
                                 paciente.getPlanDeControl().infoTareasDiaX();
                                 paciente.persistirDia();
                                 Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
@@ -173,11 +184,12 @@ public class Sistema {
                          *VerDatosPaciente(atributos, historial, etc)
                          *LlamadoAyudaSistema
                          * **/
-                        Profesional profesional = (Profesional) us;
+                        Profesional profesional = new Profesional();
                         for (String clave : profesionales.keySet()) {
-                            if (profesional.getDNI().equals(clave))
+                            if (us.getDNI().equals(clave))
                                 profesional = profesionales.get(clave);
                         }
+
                         profesional.AlertaNoRealizacionAyerPacientes();
 
                         do {
@@ -185,6 +197,7 @@ public class Sistema {
                             System.out.println("0:Salir  ---  1:ver informaciones de tareas de ayer de los pacientes ");
                             System.out.println("2:ver nuevos pacientes a atender  ---  3:asignar planes");
                             System.out.println("4:Seleccionar paciente a atender  ---  5:extender plan  ---  6:finalizar plan");
+                            System.out.println("7:Pacientes vistos en espera");
                             option = sc.nextInt();
                             sc.nextLine();
                             switch (option) {
@@ -217,6 +230,9 @@ public class Sistema {
                                     profesional.finalizarPlan();
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+                                }
+                                case 7 -> {
+                                    profesional.pacientesVistosEnEspera();
                                 }
                                 default -> System.out.println("opcion inexistente");
                             }

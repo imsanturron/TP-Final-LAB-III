@@ -3,7 +3,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Paciente extends Usuario {
     /*fechas
@@ -15,6 +14,7 @@ public class Paciente extends Usuario {
 -CompletarAccionesDeHoy(y modificar)*/
     private Profesional profesionalPropio;
     private boolean atendido = false;
+    private boolean visto = false;
     private String enfermedad;
     private PlanDeControl planDeControl; ///clonar
 
@@ -77,7 +77,7 @@ public class Paciente extends Usuario {
 
     public void resetPaciente() {
     this.fCompare = null;
-    this.fFin = null;
+    fFin = null;
     this.fIni = null;
     this.atendido  = false;
     this.enfermedad = "";
@@ -172,6 +172,14 @@ public class Paciente extends Usuario {
 
     public void setHistorialMedico(ArrayList<PlanDeControl> historialMedico) {
         this.historialMedico = historialMedico;
+    }
+
+    public boolean isVisto() {
+        return visto;
+    }
+
+    public void setVisto(boolean visto) {
+        this.visto = visto;
     }
 
     @Override

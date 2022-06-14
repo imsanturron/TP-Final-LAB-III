@@ -14,7 +14,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
     HashSet<Paciente> pacientesAAtender = new HashSet<>();
     ArrayList<Paciente> pacientesACargo = new ArrayList<>(); ///es buena para persistencia? o mejor hashmap de todos?
 
-    public Profesional(){
+    public Profesional() {
         super();
     }
 
@@ -44,7 +44,11 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
                 for (Paciente pacientex : pacientesACargo) {
                     if (pacientex.getDNI().equals(dni)) {
-                        pacientex.getHistorialMedico().get(pacientex.getHistorialMedico().size() - 1).infoTareasDiaX();
+                        if (pacientex.getHistorialMedico().size() >= 1)
+                            pacientex.getHistorialMedico().get(pacientex.getHistorialMedico().size() - 1).infoTareasDiaX();
+                        else
+                            System.out.println("Este paciente no posee historial medico actualmente.");
+
                         break;
                     }
                 }
@@ -59,9 +63,10 @@ public class Profesional extends Usuario implements CrearTratamiento {
     public void verNuevosPacientes(HashMap<String, Paciente> pacientes, ArrayList<PlanDeControl> planes) {
         int nuevos = 0;
         for (Paciente pacientex : pacientes.values()) {
-            if (!pacientex.isAtendido() && DNI.equals(pacientex.getProfesionalPropio().getDNI())) {
-                System.out.println("Nombre:" + pacientex.getNombre() + "Enfermedad:" + pacientex.getEnfermedad()
-                        + " DNI:" + pacientex.getDNI());
+            if (!pacientex.isVisto() && DNI.equals(pacientex.getProfesionalPropio().getDNI())) {
+                System.out.println("Nombre:" + pacientex.getNombre() + "  -  Enfermedad:" + pacientex.getEnfermedad()
+                        + "  -  DNI:" + pacientex.getDNI());
+                pacientex.setVisto(true);
                 pacientesAAtender.add(pacientex);
                 nuevos++;
             }
@@ -80,6 +85,20 @@ public class Profesional extends Usuario implements CrearTratamiento {
         }
     }
 
+    public void pacientesVistosEnEspera() {
+        char opcion;
+        System.out.println("Tienes " + pacientesAAtender.size() + " pacientes en espera");
+        if (pacientesAAtender.size() > 0) {
+            System.out.println("Ver informacion de cada uno? s/n");
+            opcion = scan.next().charAt(0);
+            scan.nextLine();
+
+            if (opcion == 's' || opcion == 'S') {
+                System.out.println(pacientesAAtender);
+            }
+        }
+    }
+
     public void asignarPlan(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planes) {
         int opcion, i;
         boolean satisfactorio;
@@ -87,7 +106,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
         List<Paciente> listaConver = new ArrayList<>(pacientesAAtender);
 
         while (!pacientesAAtender.isEmpty() && (s_n == 's' || s_n == 'S')) {
-            System.out.println(listaConver.get(0).nombreCompleto + "  enferemdad:" + listaConver.get(0).getEnfermedad());
+            System.out.println("\nNombre:" + listaConver.get(0).nombreCompleto + "   Enferemdad:" + listaConver.get(0).getEnfermedad());
 
             System.out.println("Que desea?\n 1:Asignar (o ver) plan predeterminado    2:Modificar (o ver) plan predeterminado" +
                     "    3: Crear plan nuevo     0:Salir");
@@ -99,20 +118,27 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 case 1:
                     satisfactorio = asignarPredet(pacs, planes, i);
                     if (satisfactorio) {
+                        System.out.println("plan satisfactoriamente asignado.");
                         pacientesACargo.add(listaConver.get(0));
+                        listaConver.get(0).setAtendido(true);
+                        listaConver.get(0).setAtendido(true);
                         listaConver.remove(0);
                     }
                     break;
                 case 2:
                     satisfactorio = modificarPredetYAsignar(pacs, planes, i);
                     if (satisfactorio) {
+                        System.out.println("plan satisfactoriamente asignado.");
                         pacientesACargo.add(listaConver.get(0));
+                        listaConver.get(0).setAtendido(true);
                         listaConver.remove(0);
                     }
                     break;
                 case 3:
                     crearTratamiento(pacs, planes);
+                    System.out.println("plan satisfactoriamente asignado.");
                     pacientesACargo.add(listaConver.get(0));
+                    listaConver.get(0).setAtendido(true);
                     listaConver.remove(0);
                     break;
             }
@@ -220,11 +246,11 @@ public class Profesional extends Usuario implements CrearTratamiento {
         String dni = scan.nextLine();
 
         for (Paciente paciente : listaConver) {
-            if (paciente.getDNI().equals(dni)) {
+            if (paciente.getDNI().equalsIgnoreCase(dni)) {
                 paciente.resetPaciente();
 
                 for (int z = 0; z < pacientesACargo.size(); z++) {
-                    if (pacientesACargo.get(z).getDNI().equals(dni)) {
+                    if (pacientesACargo.get(z).getDNI().equalsIgnoreCase(dni)) {
                         pacientesACargo.remove(z);
                         break;
                     }

@@ -1,4 +1,3 @@
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -8,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class Persistencia {
 
@@ -34,12 +34,13 @@ public class Persistencia {
     public static <s, t> HashMap<s, t> DEserializeHashMap(String path, Class<s> elementKey, Class<t> elementValue) { ///ver si anda esto
         File file = new File(path);
         ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        HashMap<s, t> ret = null;
+        HashMap<s, t> ret = new HashMap<>();
         MapType hashtype = mapper.getTypeFactory().constructMapType(HashMap.class, elementKey, elementValue);
         try {
             ret = mapper.readValue(file, hashtype);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("El archivo JSON actualmente esta vacio.");
+            //e.printStackTrace();
         }
         return ret;
     }
@@ -52,7 +53,8 @@ public class Persistencia {
         try {
             ret = mapper.readValue(file, listType);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("El archivo JSON actualmente esta vacio.");
+            //e.printStackTrace();
         }
         return ret;
     }
