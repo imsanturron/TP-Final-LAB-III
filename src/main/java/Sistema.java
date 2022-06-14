@@ -71,7 +71,7 @@ public class Sistema {
                             System.out.println("que desea hacer?");
                             System.out.println("0:Salir  ---  1:Ingreso de paciente  ---  2:Ingreso de profesional");
                             System.out.println("3:Registro de administradores  ---  4:Agregar enfermedad");
-                            System.out.println("5:Crear plan predeterminado");
+                            System.out.println("5:Crear plan predeterminado  ---  6:Modificar datos personales");
                             option = sc.nextInt();
                             sc.nextLine();
 
@@ -104,6 +104,41 @@ public class Sistema {
                                     admin.crearTratamiento(pacientes, planesDeControl);
                                     Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
                                 }
+                                case 6 -> {
+                                    int opt;
+                                    String cambiar;
+                                    System.out.println("que desea modificar?Ingrese numero:\n1:Nombre - 2:Contraseña - 3:Telefono");
+                                    opt = sc.nextInt();
+                                    sc.nextLine();
+                                    if (opt == 1) {
+                                        System.out.println("Ingrese su nuevo nombre completo:");
+                                        cambiar = sc.nextLine();
+                                        admin.setNombreCompleto(cambiar);
+                                        us.setNombreCompleto(cambiar);
+                                        System.out.println("Nombre asignado con exito");
+                                    } else if (opt == 2) {
+                                        System.out.println("ingrese su contraseña antigua");
+                                        cambiar = sc.nextLine();
+                                        if (cambiar.equals(admin.getContrasena())) {
+                                            System.out.println("Ingrese su nueva contraseña:");
+                                            cambiar = sc.nextLine();
+                                            admin.setContrasena(cambiar);
+                                            us.setContrasena(cambiar);
+                                            System.out.println("Contraseña nueva asignada con exito");
+                                        } else
+                                            System.out.println("Contraseña incorrecta");
+                                    } else if (opt == 3) {
+                                        System.out.println("Ingrese su nuevo telefono:");
+                                        cambiar = sc.nextLine();
+                                        admin.setTelefono(cambiar);
+                                        us.setTelefono(cambiar);
+                                        System.out.println("Telefono reasignado con exito");
+                                    } else
+                                        System.out.println("opcion incorrecta");
+
+                                    Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
+                                    Persistencia.serializeHashMap(administradores, Archivos.ADMINISTRADORESALL.getPath());
+                                }
                                 default -> System.out.println("opcion inexistente");
                             }
                         } while (option != 0);
@@ -131,9 +166,9 @@ public class Sistema {
                             if (diasEntre == paciente.getComparadorFecha()) {
                                 paciente.getPlanDeControl().infoTareasDiaX();
                                 paciente.persistirDia();
-                                Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                 paciente.resetDatosDiaYAlertar();
                                 paciente.setComparadorFecha(paciente.getComparadorFecha() + 1);
+                                Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                             }
                         }
                         if (paciente.getfCompare() == paciente.getfFin() || (paciente.getfFin() == null || paciente.getfCompare() == null)) {
@@ -147,6 +182,7 @@ public class Sistema {
                                 System.out.println("1)Ver tareas a hacer");
                                 System.out.println("2)Completar tareas a hacer");
                                 System.out.println("3)Modificar tareas hechas");
+                                System.out.println("4)Modificar datos personales");
                                 option = sc.nextInt();
                                 sc.nextLine();
                                 switch (option) {
@@ -165,6 +201,41 @@ public class Sistema {
                                     case 3 -> {
                                         paciente.modificarTareasAHacer();
                                         Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
+                                        Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
+                                    }
+                                    case 4 -> {
+                                        int opt;
+                                        String cambiar;
+                                        System.out.println("que desea modificar?Ingrese numero:\n1:Nombre - 2:Contraseña - 3:Telefono");
+                                        opt = sc.nextInt();
+                                        sc.nextLine();
+                                        if (opt == 1) {
+                                            System.out.println("Ingrese su nuevo nombre completo:");
+                                            cambiar = sc.nextLine();
+                                            paciente.setNombreCompleto(cambiar);
+                                            us.setNombreCompleto(cambiar);
+                                            System.out.println("Nombre asignado con exito");
+                                        } else if (opt == 2) {
+                                            System.out.println("ingrese su contraseña antigua");
+                                            cambiar = sc.nextLine();
+                                            if (cambiar.equals(paciente.getContrasena())) {
+                                                System.out.println("ingrese su nueva contraseña:");
+                                                cambiar = sc.nextLine();
+                                                paciente.setContrasena(cambiar);
+                                                us.setContrasena(cambiar);
+                                                System.out.println("contraseña nueva asignada con exito");
+                                            } else
+                                                System.out.println("Contraseña incorrecta");
+                                        } else if (opt == 3) {
+                                            System.out.println("ingrese su nuevo telefono:");
+                                            cambiar = sc.nextLine();
+                                            paciente.setTelefono(cambiar);
+                                            us.setTelefono(cambiar);
+                                            System.out.println("Telefono reasignado con exito");
+                                        } else
+                                            System.out.println("opcion incorrecta");
+
+                                        Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
                                         Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     }
                                     default -> System.out.println("opcion inexistente");
@@ -197,7 +268,7 @@ public class Sistema {
                             System.out.println("0:Salir  ---  1:ver informaciones de tareas de ayer de los pacientes ");
                             System.out.println("2:ver nuevos pacientes a atender  ---  3:asignar planes");
                             System.out.println("4:Seleccionar paciente a atender  ---  5:extender plan  ---  6:finalizar plan");
-                            System.out.println("7:Pacientes vistos en espera");
+                            System.out.println("7:Pacientes vistos en espera  ---  8:Modificar datos personales");
                             option = sc.nextInt();
                             sc.nextLine();
                             switch (option) {
@@ -211,28 +282,70 @@ public class Sistema {
                                 case 2 -> {
                                     profesional.verNuevosPacientes(pacientes, planesDeControl);
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
-                                    //esto me serializa arrays dentro de profesional?
+                                    Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
+                                    Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
                                 }
                                 case 3 -> {
                                     profesional.asignarPlan(pacientes, planesDeControl);
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+                                    Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
                                 }
                                 case 4 -> {
                                     profesional.SeleccionDePacientePorAtender();
+                                    Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
+                                    Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+                                    Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
                                 }
                                 case 5 -> {
                                     profesional.extenderPlan();
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
+                                    Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
                                 }
                                 case 6 -> {
                                     profesional.finalizarPlan();
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+                                    Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
                                 }
                                 case 7 -> {
                                     profesional.pacientesVistosEnEspera();
+                                }
+                                case 8 -> {
+                                    int opt;
+                                    String cambiar;
+                                    System.out.println("Que desea modificar?Ingrese numero:\n1:Nombre - 2:Contraseña - 3:Telefono");
+                                    opt = sc.nextInt();
+                                    sc.nextLine();
+                                    if (opt == 1) {
+                                        System.out.println("Ingrese su nuevo nombre completo:");
+                                        cambiar = sc.nextLine();
+                                        profesional.setNombreCompleto(cambiar);
+                                        us.setNombreCompleto(cambiar);
+                                        System.out.println("Nombre asignado con exito");
+                                    } else if (opt == 2) {
+                                        System.out.println("Ingrese su contraseña antigua");
+                                        cambiar = sc.nextLine();
+                                        if (cambiar.equals(profesional.getContrasena())) {
+                                            System.out.println("Ingrese su nueva contraseña:");
+                                            cambiar = sc.nextLine();
+                                            profesional.setContrasena(cambiar);
+                                            us.setContrasena(cambiar);
+                                            System.out.println("Contraseña nueva asignada con exito");
+                                        } else
+                                            System.out.println("Contraseña incorrecta");
+                                    } else if (opt == 3) {
+                                        System.out.println("Ingrese su nuevo telefono:");
+                                        cambiar = sc.nextLine();
+                                        profesional.setTelefono(cambiar);
+                                        us.setTelefono(cambiar);
+                                        System.out.println("Telefono reasignado con exito");
+                                    } else
+                                        System.out.println("opcion incorrecta");
+
+                                    Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
+                                    Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
                                 }
                                 default -> System.out.println("opcion inexistente");
                             }

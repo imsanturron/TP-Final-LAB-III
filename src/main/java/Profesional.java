@@ -2,13 +2,9 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Profesional extends Usuario implements CrearTratamiento {
-    /* *fechas
-  -VerNuevosPacientes
-  -CrearPlanDeControl
-  -Asignar plan
+    /*
   -ModificarPlanExistente
   -ControlPacientes
-  -FinalizaroExtender
   -VerDatosPaciente(atributos, historial, etc)*/
     Scanner scan = new Scanner(System.in);
     HashSet<Paciente> pacientesAAtender = new HashSet<>();
@@ -121,7 +117,6 @@ public class Profesional extends Usuario implements CrearTratamiento {
                         System.out.println("plan satisfactoriamente asignado.");
                         pacientesACargo.add(listaConver.get(0));
                         listaConver.get(0).setAtendido(true);
-                        listaConver.get(0).setAtendido(true);
                         listaConver.remove(0);
                     }
                     break;
@@ -211,7 +206,6 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(dias));
                 pacs.get(listaConver.get(0).getDNI()).setComparadorFecha(1);
                 pacientesAAtender.remove(listaConver.get(0));
-                System.out.println("Plan satisfactoriamente asignado.");
                 satisfactorio = true;
             }
         } else {

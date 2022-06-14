@@ -5,13 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Paciente extends Usuario {
-    /*fechas
-*Profesional
-*Atendido
-*PlanDeControl
-*HistorialMedico
--VerAccionesDeHoy
--CompletarAccionesDeHoy(y modificar)*/
     private Profesional profesionalPropio;
     private boolean atendido = false;
     private boolean visto = false;
@@ -58,21 +51,21 @@ public class Paciente extends Usuario {
         if (planDeControl != null)
             planDeControl.verTareas();
         else
-            System.out.println("Usted ya ha finzalizado su plan!");
+            System.out.println("Usted ya ha finalizado su plan!");
     }
 
     public void completarTareasAHacer() {
         if (planDeControl != null)
             planDeControl.completarAcciones();
         else
-            System.out.println("Usted ya ha finzalizado su plan!");
+            System.out.println("Usted ya ha finalizado su plan!");
     }
 
     public void modificarTareasAHacer() {
         if (planDeControl != null)
             planDeControl.modificarAcciones();
         else
-            System.out.println("Usted ya ha finzalizado su plan!");
+            System.out.println("Usted ya ha finalizado su plan!");
     }
 
     public void resetPaciente() {
