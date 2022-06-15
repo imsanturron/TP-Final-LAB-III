@@ -5,7 +5,6 @@ public class Usuario {
     protected String edad;
     protected String contrasena;
     protected String telefono;
-    protected boolean altaDeUsuario = false; ///para que quede guardado
 
     public Usuario(){
 
@@ -19,7 +18,6 @@ public class Usuario {
         this.contrasena = contrasena;
         this.telefono = telefono;
         this.edad = edad;
-        altaDeUsuario = true;
     }
 
     public TipoUsuario getTipoUsuario() {
@@ -64,14 +62,6 @@ public class Usuario {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public boolean isAltaDeUsuario() {
-        return altaDeUsuario;
-    }
-
-    public void setAltaDeUsuario(boolean altaDeUsuario) {
-        this.altaDeUsuario = altaDeUsuario;
     }
 
     public String getContrasena() {
