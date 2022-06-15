@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Administrador extends Usuario implements CrearTratamiento {
     Scanner scan = new Scanner(System.in);
+    private ArrayList<String> sugerencias = new ArrayList<>(); ///no puede ser static por serializacion, metodo cambiado.
 
     public Administrador() {
         super();
@@ -12,6 +13,52 @@ public class Administrador extends Usuario implements CrearTratamiento {
     public Administrador(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena,
                          String telefono, String edad) {
         super(nombreCompleto, tipoUsuario, DNI, contrasena, telefono, edad);
+    }
+
+    public void verSugerenciasPlanes(HashMap<String, Paciente> pacs, HashMap<String, Administrador> admins,
+                                     ArrayList<PlanDeControl> planes) {
+        char opcion, control = 'x';
+        int i = 0;
+
+        while (i < sugerencias.size()) {
+
+            if (pacs.containsKey(sugerencias.get(i)) && pacs.get(sugerencias.get(i)).getPlanDeControl() != null) {
+                System.out.println("Un profesional te sugirio que predetermines el siguiente plan:");
+                System.out.println("------------------------Plan " + i + "-------------------------");
+                System.out.println("Enfermedad:" + pacs.get(sugerencias.get(i)).getEnfermedad() +
+                        ", dias del plan:" + pacs.get(sugerencias.get(i)).getPlanDeControl().getDias());
+                pacs.get(sugerencias.get(i)).verTareasAHacer();
+                System.out.println("---------------------------------------------------------");
+
+                for (int j = 0; j < planes.size(); j++) {
+                    if (planes.get(j).getEnfermedad().equalsIgnoreCase(pacs.get(sugerencias.get(i)).getEnfermedad())) {
+                        control = 's';
+                        System.out.println("Actualmente hay un plan para esta enfermedad, desea sobreescribirlo? s/n");
+                        opcion = scan.next().charAt(0);
+                        scan.nextLine();
+                        if (opcion == 's' || opcion == 'S') {
+                            planes.set(j, pacs.get(sugerencias.get(i)).getPlanDeControl());
+                            System.out.println("Plan predeterminado exitosamente");
+                        } else
+                            System.out.println("Plan descartado");
+                    }
+                }
+                if (control == 'x') {
+                    System.out.println("Actualmente no existe plan por defecto para esta enfermedad. Asignar? s/n");
+                    opcion = scan.next().charAt(0);
+                    scan.nextLine();
+                    if (opcion == 's' || opcion == 'S') {
+                        planes.add(pacs.get(sugerencias.get(i)).getPlanDeControl());
+                        System.out.println("Plan asignado con exito");
+                    } else {
+                        System.out.println("Plan descartado");
+                    }
+                }
+            }
+            for (Administrador x : admins.values()) {
+                x.getSugerencias().remove(i);
+            }
+        }
     }
 
     public void ingresoPaciente(HashMap<String, Paciente> pacientes, HashMap<String, Profesional> profesionales,
@@ -81,6 +128,36 @@ public class Administrador extends Usuario implements CrearTratamiento {
         usuarios.put(dni, administradorx);
     }
 
+    public void ingresoPacienteConocido(HashMap<String, Paciente> pacientes, HashMap<String, Profesional> profesionales,
+                                        HashMap<String, Usuario> usuarios, ArrayList<String> enfermedades) {
+        int i = 0;
+        System.out.println("Que enfermedad posee?");
+        String enfmd = scan.nextLine();
+        while (i < enfermedades.size()) {
+            if (enfermedades.get(i).equalsIgnoreCase(enfmd))
+                i = enfermedades.size() + 1;
+
+            i++;
+        }
+        if (i == enfermedades.size())
+            enfermedades.add(enfmd);
+
+        System.out.println("Ingrese DNI del paciente");
+        String dni = scan.nextLine();
+
+        for (Paciente x : pacientes.values()) {
+            if (x.getDNI().equalsIgnoreCase(dni)) {
+                i = -9;
+                x.setEnfermedad(enfmd);
+                x.setProfesionalPropio(asignarProfesional(profesionales));
+                System.out.println("Paciente asignado");
+                break;
+            }
+        }
+        if (i != -9)
+            System.out.println("Paciente no hallado en el sistema");
+    }
+
     public Profesional asignarProfesional(HashMap<String, Profesional> profesionales) {
         String masterkey = "";
         int comparador = 99;
@@ -109,16 +186,42 @@ public class Administrador extends Usuario implements CrearTratamiento {
     }
 
     @Override
-    public void crearTratamiento(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planesPredet) { ///ver si esta bien
-        System.out.println("cantidad de dias del plan?");
+    public void crearTratamiento(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planesPredet,
+                                 ArrayList<String> enfermedades) { ///ver si esta bien
+        int i = 0;
+        char opcion;
+        System.out.println("Cantidad de dias del plan?");
         int dias = scan.nextInt();
         scan.nextLine();
-        System.out.println("enfermedad?");
+        System.out.println("Enfermedad?");
         String enf = scan.nextLine();
+        while (i < enfermedades.size()) {
+            if (enfermedades.get(i).equalsIgnoreCase(enf))
+                i = enfermedades.size() + 1;
+
+            i++;
+        }
+
+        if (i == enfermedades.size() || enfermedades.size() == 0)
+            enfermedades.add(enf);
+
         PlanDeControl plan = new PlanDeControl(enf, dias);
         plan.agregarTareasPROADM();
 
         planesPredet.add(plan);
+
+        System.out.println("Asignar a un paciente? s/n");
+        opcion = scan.next().charAt(0);
+        scan.nextLine();
+
+        if (opcion == 's' || opcion == 'S') {
+            System.out.println("Ingrese dni del paciente a asignar:");
+            String dni = scan.nextLine();
+            if (pacs.containsKey(dni))
+                pacs.get(dni).setPlanDeControl(plan);
+
+            System.out.println("Plan asignado satisfactoriamente");
+        }
     }
 
     public void agregarEnfermedad(ArrayList<String> enfermedades) {
@@ -128,10 +231,23 @@ public class Administrador extends Usuario implements CrearTratamiento {
             enfermedades.add(enfmd);
     }
 
+    public ArrayList<String> getSugerencias() {
+        return sugerencias;
+    }
 
-/*    *fechas
--AdministracionEnfermedades
--AdministracionPlanesDeControl
+    public void setSugerencias(ArrayList<String> sugerencias) {
+        this.sugerencias = sugerencias;
+    }
+
+    @Override
+    public String toString() {
+        return "Administrador{" +
+                "nombreCompleto='" + nombreCompleto + '\'' +
+                ", DNI='" + DNI + '\'' +
+                '}';
+    }
+
+    /*    *fechas
 -DarDeBaja
 -CambiarEstadoPaciente
 */

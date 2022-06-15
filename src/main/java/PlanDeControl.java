@@ -212,7 +212,8 @@ public class PlanDeControl implements Cloneable {
 
     public void infoTareasDiaX() {
         int i = 0;
-        System.out.println("||Tareas del " + hoy + "||");
+        System.out.println("\n==========================================================");
+        System.out.println("|| Tareas del " + hoy + " ||");
         while (i < tareas.size()) {
             if (!tareas.get(i).isHecho())
                 System.out.println(tareas.get(i).getAccion() + ": !-tarea sin realizar-!");
@@ -227,6 +228,7 @@ public class PlanDeControl implements Cloneable {
 
             i++;
         }
+        System.out.println("===========================================================\n");
     }
 
     public String getEnfermedad() {

@@ -31,8 +31,9 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
 
     public void AlertaNoRealizacionAyerPacientes(HashMap<String, Paciente> pacientes) {
-        visto = LocalDate.now();
+        visto = LocalDate.now().minusDays(1);
         if (pacientes != null && !visto.equals(LocalDate.now())) {
+            visto = LocalDate.now();
             for (Paciente x : pacientes.values()) {
                 if (x.getProfesionalPropio() != null && x.getProfesionalPropio().getDNI().equals(DNI)) {
                     if (x.isAlertaDeNoRealizacion()) {
@@ -42,14 +43,27 @@ public class Profesional extends Usuario implements CrearTratamiento {
                             x.setAlertaDeNoRealizacion(false);
 
                         x.setTermina(true);
-                    } else if (!x.getfCompare().equals(LocalDate.now()) && !x.isTermina()) {
-                            System.out.println(x.getNombre() + ", (dni:" + x.getDNI() + ") no cumplio con todas las tareas de ayer");
-                            x.setTermina(true);
+                    } else if (x.getfCompare() != null && !x.getfCompare().equals(LocalDate.now()) && !x.isTermina()) {
+                        System.out.println(x.getNombre() + ", (dni:" + x.getDNI() + ") no cumplio con todas las tareas de ayer");
+                        x.setTermina(true);
                     }
-                    if ((DAYS.between(x.getfCompare(), LocalDate.now())) > 1)
+                    if (x.getfCompare() != null && (DAYS.between(x.getfCompare(), LocalDate.now())) > 1)
                         System.out.println("El paciente no abre la aplicacion hace mas de un dia.");
                 }
             }
+        }
+        sacarPacientesFinalizados(pacientes);
+    }
+
+    public void sacarPacientesFinalizados(HashMap<String, Paciente> pacientes) {
+        int i = 0;
+        while (i < pacientesACargo.size()) {
+            if (pacientes.containsKey(pacientesACargo.get(i).getDNI())) {
+                if (pacientes.get(pacientesACargo.get(i).getDNI()).getPlanDeControl() == null) {
+                    pacientesACargo.remove(i);
+                }
+            }
+            i++;
         }
     }
 
@@ -84,7 +98,8 @@ public class Profesional extends Usuario implements CrearTratamiento {
             System.out.println("No tiene ningun paciente a cargo por el momento.");
     }
 
-    public void verNuevosPacientes(HashMap<String, Paciente> pacientes, ArrayList<PlanDeControl> planes) {
+    public void verNuevosPacientes(HashMap<String, Paciente> pacientes, ArrayList<PlanDeControl> planes,
+                                   ArrayList<String> enfermedades) {
         int nuevos = 0;
         for (Paciente pacientex : pacientes.values()) {
             if (!pacientex.isVisto() && DNI.equals(pacientex.getProfesionalPropio().getDNI())) {
@@ -102,7 +117,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 char opcion = scan.next().charAt(0);
                 scan.nextLine();
                 if (opcion == 'S' || opcion == 's')
-                    asignarPlan(pacientes, planes);
+                    asignarPlan(pacientes, planes, enfermedades);
             } catch (InputMismatchException e) {
                 System.out.println("Debiste ingresar un caracter");
             }
@@ -123,7 +138,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
         }
     }
 
-    public void asignarPlan(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planes) {
+    public void asignarPlan(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planes, ArrayList<String> enfermedades) {
         int opcion, i;
         boolean satisfactorio;
         char s_n = 's';
@@ -160,7 +175,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                     }
                     break;
                 case 3:
-                    crearTratamiento(pacs, planes);
+                    crearTratamiento(pacs, planes, enfermedades);
                     System.out.println("plan satisfactoriamente asignado.");
                     pacientesACargo.add(listaConver.get(0));
                     listaConver.get(0).setAtendido(true);
@@ -253,7 +268,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
         System.out.println("Ingrese dni del paciente:");
         String dni = scan.nextLine();
 
-        for (int i = 0; i < pacientesACargo.size(); i++) {
+        for (int i = 0; i < pacientesACargo.size(); i++) { ///no reemplazar for
             if (pacientesACargo.get(i).getDNI().equals(dni)) {
                 System.out.println("Cuantos dias desea extender el plan?");
                 masDias = scan.nextInt();
@@ -286,6 +301,19 @@ public class Profesional extends Usuario implements CrearTratamiento {
     }
 
 
+    public void verHistorialCompletoPaciente(HashMap<String, Paciente> pacs) {
+        String dni;
+        System.out.println("Ingrese dni del paciente para ver su historia medica:");
+        dni = scan.nextLine();
+
+        if (pacs.containsKey(dni)) {
+            System.out.println("Historia medica de " + pacs.get(dni).getNombre());
+            for (int i = 0; i < pacs.get(dni).getHistorialMedico().size(); i++)
+                pacs.get(dni).getHistorialMedico().get(i).infoTareasDiaX();
+        } else
+            System.out.println("No hay un paciente registrado con ese DNI.");
+    }
+
     public void SeleccionDePacientePorAtender() {
         String dni;
         System.out.println("Digite el dni del paciente del cual desee ver informacion");
@@ -312,7 +340,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
 
     @Override
-    public void crearTratamiento(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> p) {
+    public void crearTratamiento(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> p, ArrayList<String> enfermedades) {
         List<Paciente> listaConver = new ArrayList<>(pacientesAAtender);
 
         System.out.println("Cantidad de dias del plan:");
@@ -328,8 +356,21 @@ public class Profesional extends Usuario implements CrearTratamiento {
         pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(dias));
         pacs.get(listaConver.get(0).getDNI()).setComparadorFecha(1);
         pacientesAAtender.remove(listaConver.get(0));
-        ///sugerir predet a admin
+    }
 
+    public void sugerirAdminPlan(HashMap<String, Administrador> admins) {
+        String dni;
+        char seguir='s';
+        while (seguir=='s' || seguir=='S') {
+            System.out.println("Ingrese el dni de el paciente que posee el plan que le gustaria sugerir:");
+            dni = scan.nextLine();
+            for (Administrador x: admins.values()){
+             x.getSugerencias().add(dni);
+            }
+            System.out.println("Desea seguir sugiriendo planes? s/n");
+            seguir = scan.next().charAt(0);
+            scan.nextLine();
+        }
     }
 
     public HashSet<Paciente> getPacientesAAtender() {
