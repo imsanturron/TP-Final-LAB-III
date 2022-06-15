@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = RMulChoice.class, name = "RMulChoice")
 })
 public class Realizar {
-    protected String accion;
-    protected String msjEspecifico;
+    protected String accion = "";
+    protected String msjEspecifico = "";
     protected boolean hecho = false;
 
     public Realizar() {
@@ -51,9 +51,9 @@ public class Realizar {
 
     @Override
     public String toString() {
-        return "Realizar{  " +
+        return "||Realizar:  " +
                 "Tarea:'" + accion + '\'' +
-                ",  Especificacion/es:'" + msjEspecifico + '\'' +
-                '}';
+                "  --->   Especificacion/es:'" + msjEspecifico + '\'' +
+                " /||";
     }
 }

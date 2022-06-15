@@ -42,7 +42,7 @@ public class Paciente extends Usuario {
 
     public void persistirDia() {
         PlanDeControl cloned = (PlanDeControl) planDeControl.clone();
-        historialMedico.add(cloned); ///persistir paciente entero o como
+        historialMedico.add(cloned);
     }
 
     public void resetDatosDiaYAlertar() {
@@ -91,7 +91,6 @@ public class Paciente extends Usuario {
         this.comparadorFecha = 0;
         this.profesionalPropio = null;
     }
-
 
     public boolean isAtendido() {
         return atendido;

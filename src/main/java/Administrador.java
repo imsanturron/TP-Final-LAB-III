@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Administrador extends Usuario implements CrearTratamiento {
     Scanner scan = new Scanner(System.in);
-    private ArrayList<String> sugerencias = new ArrayList<>(); ///no puede ser static por serializacion, metodo cambiado.
+    private ArrayList<String> sugerencias = new ArrayList<>(); //no puede usarse static por serializacion, metodo cambiado.
 
     public Administrador() {
         super();
@@ -23,12 +23,12 @@ public class Administrador extends Usuario implements CrearTratamiento {
         while (i < sugerencias.size()) {
 
             if (pacs.containsKey(sugerencias.get(i)) && pacs.get(sugerencias.get(i)).getPlanDeControl() != null) {
-                System.out.println("Un profesional te sugirio que predetermines el siguiente plan:");
-                System.out.println("------------------------Plan " + i + "-------------------------");
+                System.out.println("\nUn profesional te sugirio que predetermines el siguiente plan:");
+                System.out.println("----------------------------Plan n°" + (i + 1) + "-----------------------------");
                 System.out.println("Enfermedad:" + pacs.get(sugerencias.get(i)).getEnfermedad() +
-                        ", dias del plan:" + pacs.get(sugerencias.get(i)).getPlanDeControl().getDias());
+                        " // Dias del plan:" + pacs.get(sugerencias.get(i)).getPlanDeControl().getDias());
                 pacs.get(sugerencias.get(i)).verTareasAHacer();
-                System.out.println("---------------------------------------------------------");
+                System.out.println("-----------------------------------------------------------------");
 
                 for (int j = 0; j < planes.size(); j++) {
                     if (planes.get(j).getEnfermedad().equalsIgnoreCase(pacs.get(sugerencias.get(i)).getEnfermedad())) {
@@ -129,7 +129,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
     }
 
     public void ingresoPacienteConocido(HashMap<String, Paciente> pacientes, HashMap<String, Profesional> profesionales,
-                                        HashMap<String, Usuario> usuarios, ArrayList<String> enfermedades) {
+                                        ArrayList<String> enfermedades) {
         int i = 0;
         System.out.println("Que enfermedad posee?");
         String enfmd = scan.nextLine();
@@ -210,7 +210,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
 
         planesPredet.add(plan);
 
-        System.out.println("Asignar a un paciente? s/n");
+        System.out.println("Asignar el plan a un paciente? s/n");
         opcion = scan.next().charAt(0);
         scan.nextLine();
 
@@ -246,9 +246,4 @@ public class Administrador extends Usuario implements CrearTratamiento {
                 ", DNI='" + DNI + '\'' +
                 '}';
     }
-
-    /*    *fechas
--DarDeBaja
--CambiarEstadoPaciente
-*/
 }

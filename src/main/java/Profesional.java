@@ -7,10 +7,6 @@ import java.util.*;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Profesional extends Usuario implements CrearTratamiento {
-    /*
-  -ModificarPlanExistente
-  -ControlPacientes
-  -VerDatosPaciente(atributos, historial, etc)*/
     Scanner scan = new Scanner(System.in);
 
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -18,7 +14,8 @@ public class Profesional extends Usuario implements CrearTratamiento {
     private LocalDate visto;
 
     HashSet<Paciente> pacientesAAtender = new HashSet<>();
-    ArrayList<Paciente> pacientesACargo = new ArrayList<>(); ///es buena para persistencia? o mejor hashmap de todos?
+    ArrayList<Paciente> pacientesACargo = new ArrayList<>();
+
 
     public Profesional() {
         super();
@@ -31,7 +28,6 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
 
     public void AlertaNoRealizacionAyerPacientes(HashMap<String, Paciente> pacientes) {
-        visto = LocalDate.now().minusDays(1);
         if (pacientes != null && !visto.equals(LocalDate.now())) {
             visto = LocalDate.now();
             for (Paciente x : pacientes.values()) {
@@ -68,7 +64,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
     }
 
     public void infoPacientesAyer(HashMap<String, Paciente> pacientes) {
-        char seguir = 's';
+        char seguir = 's', alerta;
 
         if (pacientesACargo.size() > 0) {
             for (Paciente x : pacientesACargo) {
@@ -76,11 +72,13 @@ public class Profesional extends Usuario implements CrearTratamiento {
             }
 
             while (seguir == 's' || seguir == 'S') {
+                alerta = 'x';
                 System.out.println("Ingrese el dni del paciente para ver informacion de sus actividades de ayer:");
                 String dni = scan.nextLine();
 
                 for (Paciente pacientex : pacientesACargo) {
                     if (pacientex.getDNI().equals(dni)) {
+                        alerta = 'n';
                         pacientex = pacientes.get(dni);
                         if (pacientex.getHistorialMedico().size() >= 1)
                             pacientex.getHistorialMedico().get(pacientex.getHistorialMedico().size() - 1).infoTareasDiaX();
@@ -90,6 +88,9 @@ public class Profesional extends Usuario implements CrearTratamiento {
                         break;
                     }
                 }
+                if (alerta == 'x')
+                    System.out.println("No se hallo un paciente con ese DNI");
+
                 System.out.println("Desea seguir viendo actividad de pacientes? s/n");
                 seguir = scan.next().charAt(0);
                 scan.nextLine();
@@ -219,10 +220,9 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 pacientesAAtender.remove(listaConver.get(0));
                 satisfactorio = true;
             }
-        } else {
+        } else
             System.out.println("No existe plan predeterminado para esta enfermedad.");
-            satisfactorio = false;
-        }
+
         return satisfactorio;
     }
 
@@ -256,15 +256,14 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 pacientesAAtender.remove(listaConver.get(0));
                 satisfactorio = true;
             }
-        } else {
+        } else
             System.out.println("No existe plan predeterminado para esta enfermedad.");
-            satisfactorio = false;
-        }
+
         return satisfactorio;
     }
 
     public void extenderPlan(HashMap<String, Paciente> pacs) {
-        int masDias;
+        int masDias = -99;
         System.out.println("Ingrese dni del paciente:");
         String dni = scan.nextLine();
 
@@ -279,6 +278,8 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 break;
             }
         }
+        if (masDias == -99)
+            System.out.println("No se encontro el paciente");
     }
 
     public void finalizarPlan(HashMap<String, Paciente> pacs) {
@@ -307,37 +308,39 @@ public class Profesional extends Usuario implements CrearTratamiento {
         dni = scan.nextLine();
 
         if (pacs.containsKey(dni)) {
-            System.out.println("Historia medica de " + pacs.get(dni).getNombre());
-            for (int i = 0; i < pacs.get(dni).getHistorialMedico().size(); i++)
-                pacs.get(dni).getHistorialMedico().get(i).infoTareasDiaX();
+            if (pacs.get(dni).getHistorialMedico().size() > 0) {
+                System.out.println("Historia medica de " + pacs.get(dni).getNombre());
+                for (int i = 0; i < pacs.get(dni).getHistorialMedico().size(); i++)
+                    pacs.get(dni).getHistorialMedico().get(i).infoTareasDiaX();
+            } else
+                System.out.println("Este paciente no posee historial medico actualmente");
         } else
             System.out.println("No hay un paciente registrado con ese DNI.");
     }
 
-    public void SeleccionDePacientePorAtender() {
+    public void SeleccionDePacientePropioVerInfo() {
         String dni;
+        boolean alerta = true;
         System.out.println("Digite el dni del paciente del cual desee ver informacion");
-        for (Paciente pacientex : pacientesAAtender) {
-            System.out.println(pacientex.getNombre() + "  dni:" + pacientex.getDNI());
+        for (Paciente pacientex : pacientesACargo) {
+            System.out.println(pacientex.getNombre() + ",  dni:" + pacientex.getDNI());
         }
         dni = scan.nextLine();
-        buscarPacientePorDni(dni);
-    }
-
-    public void buscarPacientePorDni(String dni) {
         for (Paciente pacientex : pacientesACargo) {
-            if (pacientex.getDNI().equals(dni)) {
-                System.out.println(pacientex);
-                /////buscar cosas
-                break;
+            if (pacientex.getDNI().equalsIgnoreCase(dni)) {
+                alerta = false;
+                System.out.println("=====================================================================");
+                System.out.println(pacientex.getNombre() + ":  DNI:" + pacientex.getDNI() + " / Enfermedad:" +
+                        pacientex.getEnfermedad() + " / Edad:" + pacientex.getEdad());
+                System.out.println("Plan asignado: fecha inicio:" + pacientex.getfIni() + " --- fecha finalizacion:" + pacientex.getfFin());
+                System.out.println("Tareas:");
+                pacientex.verTareasAHacer();
+                System.out.println("=====================================================================");
             }
         }
+        if (alerta)
+            System.out.println("No se encontro el paciente.");
     }
-
-    public String getEdad() {
-        return edad;
-    }
-
 
     @Override
     public void crearTratamiento(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> p, ArrayList<String> enfermedades) {
@@ -360,14 +363,14 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
     public void sugerirAdminPlan(HashMap<String, Administrador> admins) {
         String dni;
-        char seguir='s';
-        while (seguir=='s' || seguir=='S') {
-            System.out.println("Ingrese el dni de el paciente que posee el plan que le gustaria sugerir:");
+        char seguir = 's';
+        while (seguir == 's' || seguir == 'S') {
+            System.out.println("Ingrese el dni del paciente que posee el plan que le gustaria sugerir:");
             dni = scan.nextLine();
-            for (Administrador x: admins.values()){
-             x.getSugerencias().add(dni);
+            for (Administrador x : admins.values()) {
+                x.getSugerencias().add(dni);
             }
-            System.out.println("Desea seguir sugiriendo planes? s/n");
+            System.out.println("Desea seguir sugiriendo planes al administrador? s/n");
             seguir = scan.next().charAt(0);
             scan.nextLine();
         }

@@ -78,9 +78,9 @@ public class PlanDeControl implements Cloneable {
     public PlanDeControl ModificarTareasYAsignarAuxPROADM(int dias) {
         PlanDeControl planaux = new PlanDeControl(enfermedad, dias);
         planaux.getTareas().addAll(tareas);
-        //planaux.tareas.addAll(planaux.getTareas()); ///ver si se copian, o se pasan y borran
         char seguir = 's';
         int opcion;
+
         while (seguir == 's' || seguir == 'S') {
             System.out.println("Tareas, de la 1 a la x:");
             planaux.verTareas();
@@ -93,7 +93,7 @@ public class PlanDeControl implements Cloneable {
                 System.out.println("Que numero de tarea desea borrar?");
                 opcion = scan.nextInt();
                 scan.nextLine();
-                if (opcion <= planaux.getTareas().size() && opcion > 0) { ///me tira el array de una sin el get, como todo
+                if (opcion <= planaux.getTareas().size() && opcion > 0) {
                     System.out.println(planaux.getTareas().get(opcion - 1).getAccion() + "  ---> seguro que desea" +
                             "borrar esta tarea? s/n");
                     seguir = scan.next().charAt(0);
@@ -128,6 +128,7 @@ public class PlanDeControl implements Cloneable {
         char seguir = 's';
         boolean termina = false;
         int i = 0;
+
         while (i < tareas.size() && (seguir == 's' || seguir == 'S')) { ///protected me sugiere atributo??????
             if (!tareas.get(i).isHecho()) {
                 if (tareas.get(i) instanceof RNumerica)
@@ -155,6 +156,7 @@ public class PlanDeControl implements Cloneable {
     public void modificarAcciones() {
         int i = 0, opcion;
         char seguir = 's';
+
         System.out.println("Que accion desea modificar?");
         while (seguir == 's' || seguir == 'S') {
             while (i < tareas.size()) {
@@ -212,7 +214,8 @@ public class PlanDeControl implements Cloneable {
 
     public void infoTareasDiaX() {
         int i = 0;
-        System.out.println("\n==========================================================");
+
+        System.out.println("\n==============================================================");
         System.out.println("|| Tareas del " + hoy + " ||");
         while (i < tareas.size()) {
             if (!tareas.get(i).isHecho())
@@ -228,7 +231,7 @@ public class PlanDeControl implements Cloneable {
 
             i++;
         }
-        System.out.println("===========================================================\n");
+        System.out.println("==============================================================\n");
     }
 
     public String getEnfermedad() {

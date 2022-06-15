@@ -7,7 +7,7 @@ public enum Archivos {
     USUARIOSALL("D:\\Escritorio\\san\\TUP\\intelliJ\\tp post REINSTALL\\tplab3reinstalllll\\usuarios.json");
 
 
-    private String path;
+    private final String path;
 
     Archivos(String path){
         this.path = path;
