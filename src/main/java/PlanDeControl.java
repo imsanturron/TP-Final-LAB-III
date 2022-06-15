@@ -98,12 +98,11 @@ public class PlanDeControl implements Cloneable {
                             "borrar esta tarea? s/n");
                     seguir = scan.next().charAt(0);
                     scan.nextLine();
-                    if (seguir == 's' || seguir == 'S'){
+                    if (seguir == 's' || seguir == 'S') {
                         planaux.getTareas().remove(opcion - 1);
                         System.out.println("Tarea removida.");
                     }
-                }
-                else
+                } else
                     System.out.println("opcion inexistente");
             } else if (opcion == 2) {
                 planaux.agregarTareasPROADM();
@@ -125,8 +124,9 @@ public class PlanDeControl implements Cloneable {
         }
     }
 
-    public void completarAcciones() {
+    public boolean completarAcciones() {
         char seguir = 's';
+        boolean termina = false;
         int i = 0;
         while (i < tareas.size() && (seguir == 's' || seguir == 'S')) { ///protected me sugiere atributo??????
             if (!tareas.get(i).isHecho()) {
@@ -145,8 +145,11 @@ public class PlanDeControl implements Cloneable {
             }
             i++;
         }
-        if (i == tareas.size())
+        if (i == tareas.size()) {
             System.out.println("Ya completo todas sus tareas");
+            termina = true;
+        }
+        return termina;
     }
 
     public void modificarAcciones() {
@@ -204,12 +207,7 @@ public class PlanDeControl implements Cloneable {
 
             i++;
         }
-        if (alerta == 1) {
-            System.out.println("No ingresaste todas tus actividades del dia de ayer. Intenta" +
-                    "realizar tus actividades correspondientes por favor.");
-            return true;
-        }
-        return false;
+        return alerta == 1;
     }
 
     public void infoTareasDiaX() {

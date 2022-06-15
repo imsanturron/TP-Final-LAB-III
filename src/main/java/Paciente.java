@@ -9,6 +9,7 @@ public class Paciente extends Usuario {
     private boolean atendido = false;
     private boolean visto = false;
     private String enfermedad;
+    private boolean termina;
     private PlanDeControl planDeControl; ///clonar
 
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -28,7 +29,7 @@ public class Paciente extends Usuario {
     private boolean alertaDeNoRealizacion = false;
     ArrayList<PlanDeControl> historialMedico = new ArrayList<>();
 
-    public Paciente(){
+    public Paciente() {
         super();
     }
 
@@ -39,11 +40,22 @@ public class Paciente extends Usuario {
         this.enfermedad = enfermedad;
     }
 
-    public void persistirDia(){
-        historialMedico.add(planDeControl); ///persistir paciente entero o como
+    public void persistirDia() {
+        PlanDeControl cloned = (PlanDeControl) planDeControl.clone();
+        historialMedico.add(cloned); ///persistir paciente entero o como
     }
+
     public void resetDatosDiaYAlertar() {
         alertaDeNoRealizacion = planDeControl.resetDia();
+
+        if (alertaDeNoRealizacion) {
+            System.out.println("No ingresaste todas tus actividades del dia de ayer. Intenta" +
+                    "realizar tus actividades correspondientes por favor.");
+        }
+        if (profesionalPropio.getVisto().equals(LocalDate.now())) {
+            alertaDeNoRealizacion = false;
+            termina = false;
+        }
     }
 
 
@@ -56,7 +68,7 @@ public class Paciente extends Usuario {
 
     public void completarTareasAHacer() {
         if (planDeControl != null)
-            planDeControl.completarAcciones();
+            termina = planDeControl.completarAcciones();
         else
             System.out.println("Usted ya ha finalizado su plan!");
     }
@@ -69,17 +81,16 @@ public class Paciente extends Usuario {
     }
 
     public void resetPaciente() {
-    this.fCompare = null;
-    fFin = null;
-    this.fIni = null;
-    this.atendido  = false;
-    this.enfermedad = "";
-    this.planDeControl = null;
-    this.alertaDeNoRealizacion = false;
-    this.comparadorFecha = 0;
-    //this.profesionalPropio = null;
+        this.fCompare = null;
+        fFin = null;
+        this.fIni = null;
+        this.atendido = false;
+        this.enfermedad = "";
+        this.planDeControl = null;
+        this.alertaDeNoRealizacion = false;
+        this.comparadorFecha = 0;
+        this.profesionalPropio = null;
     }
-
 
 
     public boolean isAtendido() {
@@ -173,6 +184,14 @@ public class Paciente extends Usuario {
 
     public void setVisto(boolean visto) {
         this.visto = visto;
+    }
+
+    public boolean isTermina() {
+        return termina;
+    }
+
+    public void setTermina(boolean termina) {
+        this.termina = termina;
     }
 
     @Override

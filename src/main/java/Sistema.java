@@ -59,16 +59,19 @@ public class Sistema {
                         pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
                         profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
                         System.out.println("Administrador");
-                        //Administrador admin = (Administrador) us;
                         Administrador admin = new Administrador();
+
                         for (String clave : administradores.keySet()) {
-                            if (us.getDNI().equals(clave))
+                            if (us.getDNI().equals(clave)) {
                                 admin = administradores.get(clave);
+                                admin.setContrasena(us.getContrasena());
+                                Persistencia.serializeHashMap(administradores, Archivos.ADMINISTRADORESALL.getPath());
+                            }
                         }
                         System.out.println("Bienvenido " + admin.getNombreCompleto());
 
                         do {
-                            System.out.println("que desea hacer?");
+                            System.out.println("\nQue desea hacer?");
                             System.out.println("0:Salir  ---  1:Ingreso de paciente  ---  2:Ingreso de profesional");
                             System.out.println("3:Registro de administradores  ---  4:Agregar enfermedad");
                             System.out.println("5:Crear plan predeterminado  ---  6:Modificar datos personales");
@@ -107,7 +110,7 @@ public class Sistema {
                                 case 6 -> {
                                     int opt;
                                     String cambiar;
-                                    System.out.println("que desea modificar?Ingrese numero:\n1:Nombre - 2:Contraseña - 3:Telefono");
+                                    System.out.println("Que desea modificar?Ingrese numero:\n1:Nombre - 2:Contraseña - 3:Telefono");
                                     opt = sc.nextInt();
                                     sc.nextLine();
                                     if (opt == 1) {
@@ -117,7 +120,7 @@ public class Sistema {
                                         us.setNombreCompleto(cambiar);
                                         System.out.println("Nombre asignado con exito");
                                     } else if (opt == 2) {
-                                        System.out.println("ingrese su contraseña antigua");
+                                        System.out.println("ingrese su contraseña actual");
                                         cambiar = sc.nextLine();
                                         if (cambiar.equals(admin.getContrasena())) {
                                             System.out.println("Ingrese su nueva contraseña:");
@@ -154,11 +157,19 @@ public class Sistema {
                         System.out.println("Paciente");
                         Paciente paciente = new Paciente();
                         for (String clave : pacientes.keySet()) {
-                            if (us.getDNI().equals(clave))
+                            if (us.getDNI().equals(clave)) {
                                 paciente = pacientes.get(clave);
+                                paciente.setContrasena(us.getContrasena());
+                                Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
+                            }
                         }
+                        System.out.println("Bienvenido " + paciente.getNombreCompleto());
                         long diasEntre;
 
+                        /*paciente.persistirDia();
+                        Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
+                        paciente.resetDatosDiaYAlertar();
+                        Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());//cambia datos el reset*/
                         if (paciente.getfIni() != null) {
                             paciente.setfCompare(LocalDate.now());
                             diasEntre = DAYS.between(paciente.getfIni(), paciente.getfCompare());
@@ -166,18 +177,20 @@ public class Sistema {
                             if (diasEntre == paciente.getComparadorFecha()) {
                                 paciente.getPlanDeControl().infoTareasDiaX();
                                 paciente.persistirDia();
-                                paciente.resetDatosDiaYAlertar();
+                                paciente.resetDatosDiaYAlertar(); ///borra?
                                 paciente.setComparadorFecha(paciente.getComparadorFecha() + 1);
                                 Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
+                                Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
                             }
                         }
                         if (paciente.getfCompare() == paciente.getfFin() || (paciente.getfFin() == null || paciente.getfCompare() == null)) {
                             System.out.println("Ha finalizado su plan");
                             paciente.resetPaciente();
+                            Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                         } else {
 
                             do {
-                                System.out.println("que desea hacer?");
+                                System.out.println("\nQue desea hacer?");
                                 System.out.println("0)Salir");
                                 System.out.println("1)Ver tareas a hacer");
                                 System.out.println("2)Completar tareas a hacer");
@@ -206,7 +219,7 @@ public class Sistema {
                                     case 4 -> {
                                         int opt;
                                         String cambiar;
-                                        System.out.println("que desea modificar?Ingrese numero:\n1:Nombre - 2:Contraseña - 3:Telefono");
+                                        System.out.println("Que desea modificar?Ingrese numero:\n1:Nombre - 2:Contraseña - 3:Telefono");
                                         opt = sc.nextInt();
                                         sc.nextLine();
                                         if (opt == 1) {
@@ -216,7 +229,7 @@ public class Sistema {
                                             us.setNombreCompleto(cambiar);
                                             System.out.println("Nombre asignado con exito");
                                         } else if (opt == 2) {
-                                            System.out.println("ingrese su contraseña antigua");
+                                            System.out.println("ingrese su contraseña actual");
                                             cambiar = sc.nextLine();
                                             if (cambiar.equals(paciente.getContrasena())) {
                                                 System.out.println("ingrese su nueva contraseña:");
@@ -249,7 +262,7 @@ public class Sistema {
                         administradores = Persistencia.DEserializeHashMap(Archivos.ADMINISTRADORESALL.getPath(), String.class, Administrador.class);
                         pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
                         profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
-                        System.out.println("profesional");
+                        System.out.println("Profesional");
                         /***
                          *ControlPacientes
                          *VerDatosPaciente(atributos, historial, etc)
@@ -257,14 +270,20 @@ public class Sistema {
                          * **/
                         Profesional profesional = new Profesional();
                         for (String clave : profesionales.keySet()) {
-                            if (us.getDNI().equals(clave))
+                            if (us.getDNI().equals(clave)) {
                                 profesional = profesionales.get(clave);
+                                profesional.setContrasena(us.getContrasena());
+                                Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+                            }
                         }
+                        System.out.println("Bienvenido " + profesional.getNombreCompleto());
 
-                        profesional.AlertaNoRealizacionAyerPacientes();
+                        profesional.AlertaNoRealizacionAyerPacientes(pacientes);
+                        Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
+                        Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
 
                         do {
-                            System.out.println("que desea hacer?");
+                            System.out.println("\nQue desea hacer?");
                             System.out.println("0:Salir  ---  1:ver informaciones de tareas de ayer de los pacientes ");
                             System.out.println("2:ver nuevos pacientes a atender  ---  3:asignar planes");
                             System.out.println("4:Seleccionar paciente a atender  ---  5:extender plan  ---  6:finalizar plan");
@@ -277,7 +296,8 @@ public class Sistema {
                                     rta = 'n';
                                 }
                                 case 1 -> {
-                                    profesional.infoPacientesAyer();
+                                    profesional.infoPacientesAyer(pacientes);
+                                    Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
                                 }
                                 case 2 -> {
                                     profesional.verNuevosPacientes(pacientes, planesDeControl);
@@ -298,13 +318,13 @@ public class Sistema {
                                     Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
                                 }
                                 case 5 -> {
-                                    profesional.extenderPlan();
+                                    profesional.extenderPlan(pacientes);
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
                                 }
                                 case 6 -> {
-                                    profesional.finalizarPlan();
+                                    profesional.finalizarPlan(pacientes);
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
                                     Persistencia.serializeArrayList(planesDeControl, Archivos.PLANESPREDET.getPath());
@@ -325,7 +345,7 @@ public class Sistema {
                                         us.setNombreCompleto(cambiar);
                                         System.out.println("Nombre asignado con exito");
                                     } else if (opt == 2) {
-                                        System.out.println("Ingrese su contraseña antigua");
+                                        System.out.println("Ingrese su contraseña actual");
                                         cambiar = sc.nextLine();
                                         if (cambiar.equals(profesional.getContrasena())) {
                                             System.out.println("Ingrese su nueva contraseña:");

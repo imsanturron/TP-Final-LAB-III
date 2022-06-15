@@ -1,5 +1,10 @@
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.time.LocalDate;
 import java.util.*;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Profesional extends Usuario implements CrearTratamiento {
     /*
@@ -7,6 +12,11 @@ public class Profesional extends Usuario implements CrearTratamiento {
   -ControlPacientes
   -VerDatosPaciente(atributos, historial, etc)*/
     Scanner scan = new Scanner(System.in);
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate visto;
+
     HashSet<Paciente> pacientesAAtender = new HashSet<>();
     ArrayList<Paciente> pacientesACargo = new ArrayList<>(); ///es buena para persistencia? o mejor hashmap de todos?
 
@@ -14,19 +24,36 @@ public class Profesional extends Usuario implements CrearTratamiento {
         super();
     }
 
-    public Profesional(String nombreCompleto, TipoUsuario tipoUsuario, String DNI,
-                       String contrasena, String telefono, String edad) {
+    public Profesional(String nombreCompleto, TipoUsuario tipoUsuario, String DNI, String contrasena, String telefono, String edad) {
         super(nombreCompleto, tipoUsuario, DNI, contrasena, telefono, edad);
+        visto = LocalDate.now();
     }
 
-    public void AlertaNoRealizacionAyerPacientes() {
-        for (Paciente x : pacientesACargo) {
-            if (x.isAlertaDeNoRealizacion())
-                System.out.println(x.getNombre() + ", (dni:" + x.getDNI() + ") no cumplio con todas las tareas de ayer");
+
+    public void AlertaNoRealizacionAyerPacientes(HashMap<String, Paciente> pacientes) {
+        visto = LocalDate.now();
+        if (pacientes != null && !visto.equals(LocalDate.now())) {
+            for (Paciente x : pacientes.values()) {
+                if (x.getProfesionalPropio() != null && x.getProfesionalPropio().getDNI().equals(DNI)) {
+                    if (x.isAlertaDeNoRealizacion()) {
+                        System.out.println(x.getNombre() + ", (dni:" + x.getDNI() + ") no cumplio con todas las tareas de ayer");
+
+                        if (x.getfCompare().equals(LocalDate.now()))
+                            x.setAlertaDeNoRealizacion(false);
+
+                        x.setTermina(true);
+                    } else if (!x.getfCompare().equals(LocalDate.now()) && !x.isTermina()) {
+                            System.out.println(x.getNombre() + ", (dni:" + x.getDNI() + ") no cumplio con todas las tareas de ayer");
+                            x.setTermina(true);
+                    }
+                    if ((DAYS.between(x.getfCompare(), LocalDate.now())) > 1)
+                        System.out.println("El paciente no abre la aplicacion hace mas de un dia.");
+                }
+            }
         }
     }
 
-    public void infoPacientesAyer() {
+    public void infoPacientesAyer(HashMap<String, Paciente> pacientes) {
         char seguir = 's';
 
         if (pacientesACargo.size() > 0) {
@@ -40,6 +67,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
                 for (Paciente pacientex : pacientesACargo) {
                     if (pacientex.getDNI().equals(dni)) {
+                        pacientex = pacientes.get(dni);
                         if (pacientex.getHistorialMedico().size() >= 1)
                             pacientex.getHistorialMedico().get(pacientex.getHistorialMedico().size() - 1).infoTareasDiaX();
                         else
@@ -117,6 +145,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                         System.out.println("plan satisfactoriamente asignado.");
                         pacientesACargo.add(listaConver.get(0));
                         listaConver.get(0).setAtendido(true);
+                        pacs.get(listaConver.get(0).getDNI()).setAtendido(true);
                         listaConver.remove(0);
                     }
                     break;
@@ -126,6 +155,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                         System.out.println("plan satisfactoriamente asignado.");
                         pacientesACargo.add(listaConver.get(0));
                         listaConver.get(0).setAtendido(true);
+                        pacs.get(listaConver.get(0).getDNI()).setAtendido(true);
                         listaConver.remove(0);
                     }
                     break;
@@ -134,6 +164,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                     System.out.println("plan satisfactoriamente asignado.");
                     pacientesACargo.add(listaConver.get(0));
                     listaConver.get(0).setAtendido(true);
+                    pacs.get(listaConver.get(0).getDNI()).setAtendido(true);
                     listaConver.remove(0);
                     break;
             }
@@ -167,6 +198,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 PlanDeControl cloned = (PlanDeControl) planes.get(i).clone();
                 pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(cloned);
                 pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
+                pacs.get(listaConver.get(0).getDNI()).setfCompare(LocalDate.now());
                 pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(planes.get(i).getDias()));
                 pacs.get(listaConver.get(0).getDNI()).setComparadorFecha(1);
                 pacientesAAtender.remove(listaConver.get(0));
@@ -203,6 +235,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
                 scan.nextLine();
                 pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(planes.get(i).ModificarTareasYAsignarAuxPROADM(dias));
                 pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
+                pacs.get(listaConver.get(0).getDNI()).setfCompare(LocalDate.now());
                 pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(dias));
                 pacs.get(listaConver.get(0).getDNI()).setComparadorFecha(1);
                 pacientesAAtender.remove(listaConver.get(0));
@@ -215,44 +248,43 @@ public class Profesional extends Usuario implements CrearTratamiento {
         return satisfactorio;
     }
 
-    public void extenderPlan() {
+    public void extenderPlan(HashMap<String, Paciente> pacs) {
         int masDias;
-        List<Paciente> listaConver = new ArrayList<>(pacientesACargo);
         System.out.println("Ingrese dni del paciente:");
         String dni = scan.nextLine();
 
-        for (int i = 0; i < listaConver.size(); i++) {
-            if (listaConver.get(i).getDNI().equals(dni)) {
+        for (int i = 0; i < pacientesACargo.size(); i++) {
+            if (pacientesACargo.get(i).getDNI().equals(dni)) {
                 System.out.println("Cuantos dias desea extender el plan?");
                 masDias = scan.nextInt();
                 scan.nextLine();
-
-                listaConver.get(i).setfFin(listaConver.get(i).getfFin().plusDays(masDias));
+                pacs.get(dni).setfFin(pacs.get(dni).getfFin().plusDays(masDias));
+                pacientesACargo.get(i).setfFin(pacientesACargo.get(i).getfFin().plusDays(masDias));
+                System.out.println("Plan extendido exitosamente.");
                 break;
             }
         }
-        System.out.println("Plan extendido exitosamente.");
     }
 
-    public void finalizarPlan() {
-        List<Paciente> listaConver = new ArrayList<>(pacientesACargo);
+    public void finalizarPlan(HashMap<String, Paciente> pacs) {
         System.out.println("Ingrese dni del paciente:");
         String dni = scan.nextLine();
+        int elimina = -1;
 
-        for (Paciente paciente : listaConver) {
-            if (paciente.getDNI().equalsIgnoreCase(dni)) {
-                paciente.resetPaciente();
-
-                for (int z = 0; z < pacientesACargo.size(); z++) {
-                    if (pacientesACargo.get(z).getDNI().equalsIgnoreCase(dni)) {
-                        pacientesACargo.remove(z);
-                        break;
-                    }
-                }
-                System.out.println("Plan finalizado con exito");
+        for (int i = 0; i < pacientesACargo.size(); i++) {
+            if (pacientesACargo.get(i).getDNI().equalsIgnoreCase(dni)) {
+                elimina = i;
+                break;
             }
         }
+        if (elimina != -1) {
+            pacs.get(dni).resetPaciente();
+            pacientesACargo.remove(elimina);
+            System.out.println("Plan finalizado con exito");
+        } else
+            System.out.println("Paciente no encontrado");
     }
+
 
     public void SeleccionDePacientePorAtender() {
         String dni;
@@ -292,6 +324,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
         pacs.get(listaConver.get(0).getDNI()).setPlanDeControl(plan);
         pacs.get(listaConver.get(0).getDNI()).setfIni(LocalDate.now());
+        pacs.get(listaConver.get(0).getDNI()).setfCompare(LocalDate.now());
         pacs.get(listaConver.get(0).getDNI()).setfFin(LocalDate.now().plusDays(dias));
         pacs.get(listaConver.get(0).getDNI()).setComparadorFecha(1);
         pacientesAAtender.remove(listaConver.get(0));
@@ -313,5 +346,13 @@ public class Profesional extends Usuario implements CrearTratamiento {
 
     public void setPacientesACargo(ArrayList<Paciente> pacientesACargo) {
         this.pacientesACargo = pacientesACargo;
+    }
+
+    public LocalDate getVisto() {
+        return visto;
+    }
+
+    public void setVisto(LocalDate visto) {
+        this.visto = visto;
     }
 }

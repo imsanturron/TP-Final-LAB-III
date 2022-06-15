@@ -36,7 +36,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
             i++;
         }
 
-        if (i == enfermedades.size() + 1)
+        if (i == enfermedades.size() || enfermedades.size() == 0)
             enfermedades.add(enfmd);
 
         Profesional asignarPro = asignarProfesional(profesionales);
