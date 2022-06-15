@@ -18,7 +18,7 @@ public class RBooleana extends Realizar {
         ingresa = scan.next().charAt(0);
         scan.nextLine();
         hecho = true;
-        dato = ingresa == 's' | ingresa == 'S';
+        dato = (ingresa == 's' | ingresa == 'S');
     }
 
     public boolean isDato() {

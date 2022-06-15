@@ -9,7 +9,7 @@ public class RMulChoice extends Realizar {
 
     public RMulChoice(String accion, String msjEspecifico) {
         super(accion, msjEspecifico);
-        datOpcion = "sin ingresar";
+        datOpcion = "-sin ingresar-";
     }
 
     public void ingresarOpcionMultiple() {
@@ -21,21 +21,11 @@ public class RMulChoice extends Realizar {
             option = scan.nextInt();
             scan.nextLine();
             switch (option) {
-                case 1:
-                    datOpcion = "Optimo";
-                    break;
-                case 2:
-                    datOpcion = "Casi en buen estado";
-                    break;
-                case 3:
-                    datOpcion = "Mal";
-                    break;
-                case 4:
-                    datOpcion = "Pesimo";
-                    break;
-                default:
-                    System.out.println("Ingresaste un numero invalido! Ingrese nuevamente:");
-                    break;
+                case 1 -> datOpcion = "Optimo";
+                case 2 -> datOpcion = "Casi en buen estado";
+                case 3 -> datOpcion = "Mal";
+                case 4 -> datOpcion = "Pesimo";
+                default -> System.out.println("Ingresaste un numero invalido! Ingrese nuevamente:");
             }
         } while (option > 4 || option < 1);
         hecho = true;

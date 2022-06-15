@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 public class Persistencia {
 
     public static <s, t> void serializeHashMap(HashMap<s, t> hashMap, String path) { ///o string path

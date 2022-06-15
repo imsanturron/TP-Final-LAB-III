@@ -77,14 +77,15 @@ public class PlanDeControl implements Cloneable {
 
     public PlanDeControl ModificarTareasYAsignarAuxPROADM(int dias) {
         PlanDeControl planaux = new PlanDeControl(enfermedad, dias);
-        planaux.tareas.addAll(planaux.getTareas()); ///ver si se copian, o se pasan y borran
+        planaux.getTareas().addAll(tareas);
         char seguir = 's';
         int opcion;
+
         while (seguir == 's' || seguir == 'S') {
             System.out.println("Tareas, de la 1 a la x:");
             planaux.verTareas();
 
-            System.out.println("Desea remover(1) o agregar(2)?");
+            System.out.println("Desea remover(1) o agregar(2) tareas?");
             opcion = scan.nextInt();
             scan.nextLine();
 
@@ -92,19 +93,25 @@ public class PlanDeControl implements Cloneable {
                 System.out.println("Que numero de tarea desea borrar?");
                 opcion = scan.nextInt();
                 scan.nextLine();
-                if (opcion <= planaux.getTareas().size() && opcion > 0) { ///me tira el array de una sin el get, como todo
+                if (opcion <= planaux.getTareas().size() && opcion > 0) {
                     System.out.println(planaux.getTareas().get(opcion - 1).getAccion() + "  ---> seguro que desea" +
                             "borrar esta tarea? s/n");
                     seguir = scan.next().charAt(0);
-                    if (seguir == 's' || seguir == 'S')
+                    scan.nextLine();
+                    if (seguir == 's' || seguir == 'S') {
                         planaux.getTareas().remove(opcion - 1);
-                }
+                        System.out.println("Tarea removida.");
+                    }
+                } else
+                    System.out.println("opcion inexistente");
             } else if (opcion == 2) {
                 planaux.agregarTareasPROADM();
             } else
                 System.out.println("Numero invalido.");
 
-            System.out.println("Desea seguir? s/n");
+            System.out.println("Desea seguir modificando? s/n");
+            seguir = scan.next().charAt(0);
+            scan.nextLine();
         }
         return planaux;
     }
@@ -117,9 +124,11 @@ public class PlanDeControl implements Cloneable {
         }
     }
 
-    public void completarAcciones() {
+    public boolean completarAcciones() {
         char seguir = 's';
+        boolean termina = false;
         int i = 0;
+
         while (i < tareas.size() && (seguir == 's' || seguir == 'S')) { ///protected me sugiere atributo??????
             if (!tareas.get(i).isHecho()) {
                 if (tareas.get(i) instanceof RNumerica)
@@ -137,13 +146,17 @@ public class PlanDeControl implements Cloneable {
             }
             i++;
         }
-        if (i == tareas.size())
+        if (i == tareas.size()) {
             System.out.println("Ya completo todas sus tareas");
+            termina = true;
+        }
+        return termina;
     }
 
     public void modificarAcciones() {
         int i = 0, opcion;
         char seguir = 's';
+
         System.out.println("Que accion desea modificar?");
         while (seguir == 's' || seguir == 'S') {
             while (i < tareas.size()) {
@@ -177,7 +190,7 @@ public class PlanDeControl implements Cloneable {
         int i = 0, alerta = 0;
         hoy = LocalDate.now();
 
-        while (i < tareas.size() && alerta != 1) {
+        while (i < tareas.size()) {
             if (!tareas.get(i).isHecho())
                 alerta = 1;
             else if (tareas.get(i) instanceof RNumerica) {
@@ -193,18 +206,17 @@ public class PlanDeControl implements Cloneable {
                 tareas.get(i).setHecho(false);
                 ((RMulChoice) tareas.get(i)).setDatOpcion("sin ingresar");
             }
+
+            i++;
         }
-        if (alerta == 1) {
-            System.out.println("No ingresaste todas tus actividades del dia de ayer. Intenta" +
-                    "realizar tus actividades correspondientes por favor.");
-            return true;
-        }
-        return false;
+        return alerta == 1;
     }
 
     public void infoTareasDiaX() {
         int i = 0;
-        System.out.println(hoy);
+
+        System.out.println("\n==============================================================");
+        System.out.println("|| Tareas del " + hoy + " ||");
         while (i < tareas.size()) {
             if (!tareas.get(i).isHecho())
                 System.out.println(tareas.get(i).getAccion() + ": !-tarea sin realizar-!");
@@ -216,7 +228,10 @@ public class PlanDeControl implements Cloneable {
                 System.out.println(tareas.get(i).getAccion() + ": " + ((RBooleana) tareas.get(i)).isDato());
             else if (tareas.get(i) instanceof RMulChoice)
                 System.out.println(tareas.get(i).getAccion() + ": " + ((RMulChoice) tareas.get(i)).getDatOpcion());
+
+            i++;
         }
+        System.out.println("==============================================================\n");
     }
 
     public String getEnfermedad() {

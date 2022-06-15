@@ -1,1 +1,12 @@
-{"9999":{"nombreCompleto":"admin master","tipoUsuario":"ADMINISTRADOR","edad":"0","contrasena":"10","telefono":"0","altaDeUsuario":true,"dni":"9999"}}
+{
+  "9999": {
+    "nombreCompleto": "admin master",
+    "tipoUsuario": "ADMINISTRADOR",
+    "edad": "40",
+    "contrasena": "1234",
+    "telefono": "155",
+    "altaDeUsuario": true,
+    "sugerencias": [],
+    "dni": "9999"
+  }
+}

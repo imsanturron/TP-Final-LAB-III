@@ -27,7 +27,7 @@ public class Login {
         return null;
     }
 
-    public String getContraseña() {
+    public String getContrasena() {
         return contrasena;
     }
 

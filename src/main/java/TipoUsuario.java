@@ -5,4 +5,8 @@ public enum TipoUsuario {
     TipoUsuario(int tipo) {
         this.tipo = tipo;
     }
+
+    public int getTipo() {
+        return tipo;
+    }
 }
