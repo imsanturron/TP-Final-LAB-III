@@ -171,20 +171,6 @@ public class Administrador extends Usuario implements CrearTratamiento {
         return profesionales.get(masterkey);
     }
 
-    public void darDeBaja() {
-        int opcion = 99;
-        System.out.println("dar de baja a:\n 1:Administrador  -  2:Paciente  -  3:Profesional   -   0:Salir");
-        try {
-            opcion = scan.nextInt();
-            scan.nextLine();
-            while (opcion != 0) {
-                /////
-            }
-        } catch (IllegalArgumentException | SecurityException exc) {
-            System.out.println("aaaaaaaaaaaa");
-        }
-    }
-
     @Override
     public void crearTratamiento(HashMap<String, Paciente> pacs, ArrayList<PlanDeControl> planesPredet,
                                  ArrayList<String> enfermedades) { ///ver si esta bien
