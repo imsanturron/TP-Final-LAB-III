@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class LocalDateSerializer extends StdSerializer<LocalDate> {
+public class LocalDateSerializer extends StdSerializer<LocalDate> { ///clase para la correcta serializacion del LocalDate
 
     public LocalDateSerializer() {
         super(LocalDate.class);

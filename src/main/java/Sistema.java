@@ -30,7 +30,7 @@ public class Sistema {
 
             if (us != null) {
 
-                if (us.getContrasena().equalsIgnoreCase(us.getDNI())) {
+                if (us.getContrasena().equalsIgnoreCase(us.getDNI())) { ///primera vez que ingresa al sistema
                     System.out.println("Bienvenido al sistema de control!");
                     do {
                         System.out.println("Ingrese su nueva contraseña:");
@@ -46,7 +46,7 @@ public class Sistema {
                     Persistencia.serializeHashMap(usuariosDelSistema, Archivos.USUARIOSALL.getPath());
                 }
 
-                switch (us.tipoUsuario) {
+                switch (us.tipoUsuario) { ///despersistencia dependiendo del tipo de usuario
                     case ADMINISTRADOR: {
                         administradores = Persistencia.DEserializeHashMap(Archivos.ADMINISTRADORESALL.getPath(), String.class, Administrador.class);
                         pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
@@ -55,7 +55,7 @@ public class Sistema {
 
                         for (String clave : administradores.keySet()) {
                             if (us.getDNI().equals(clave)) {
-                                admin = administradores.get(clave);
+                                admin = administradores.get(clave); ///hago referencia
                                 admin.setContrasena(us.getContrasena());
                                 Persistencia.serializeHashMap(administradores, Archivos.ADMINISTRADORESALL.getPath());
                             }
@@ -142,7 +142,7 @@ public class Sistema {
                                     Persistencia.serializeHashMap(administradores, Archivos.ADMINISTRADORESALL.getPath());
                                 }
                                 case 7 -> {
-                                    admin.ingresoPacienteConocido(pacientes, profesionales, enfermedades);
+                                    admin.ingresoPacienteConocido(pacientes, profesionales, enfermedades); ///paciente ya ingresado
                                     Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
                                     Persistencia.serializeHashMap(profesionales, Archivos.PROFESIONALESALL.getPath());
                                     Persistencia.serializeArrayList(enfermedades, Archivos.ENFERMEDADESALL.getPath());
@@ -172,9 +172,9 @@ public class Sistema {
 
                         if (paciente.getfIni() != null) {
                             paciente.setfCompare(LocalDate.now());
-                            diasEntre = DAYS.between(paciente.getfIni(), paciente.getfCompare());
+                            diasEntre = DAYS.between(paciente.getfIni(), paciente.getfCompare()); //ver si paso un dia
 
-                            if (diasEntre >= paciente.getComparadorFecha()) {////////////
+                            if (diasEntre >= paciente.getComparadorFecha()) {///paso un dia o mas
                                 paciente.getPlanDeControl().infoTareasDiaX();
                                 paciente.persistirDia();
                                 Persistencia.serializeHashMap(pacientes, Archivos.PACIENTESALL.getPath());
@@ -273,10 +273,7 @@ public class Sistema {
                         administradores = Persistencia.DEserializeHashMap(Archivos.ADMINISTRADORESALL.getPath(), String.class, Administrador.class);
                         pacientes = Persistencia.DEserializeHashMap(Archivos.PACIENTESALL.getPath(), String.class, Paciente.class);
                         profesionales = Persistencia.DEserializeHashMap(Archivos.PROFESIONALESALL.getPath(), String.class, Profesional.class);
-                        /***
-                         *ControlPacientes
-                         *VerDatosPaciente(atributos, historial, etc)
-                         * **/
+
                         Profesional profesional = new Profesional();
                         for (String clave : profesionales.keySet()) {
                             if (us.getDNI().equals(clave)) {

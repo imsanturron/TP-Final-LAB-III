@@ -212,7 +212,7 @@ public class PlanDeControl implements Cloneable {
         return alerta == 1;
     }
 
-    public void infoTareasDiaX() {
+    public void infoTareasDiaX() { ///muestra tareas hechas en x dia
         int i = 0;
 
         System.out.println("\n==============================================================");
@@ -267,7 +267,7 @@ public class PlanDeControl implements Cloneable {
     }
 
     @Override
-    public PlanDeControl clone() {
+    public PlanDeControl clone() { ///clone por si se elimina el plan
         try {
             PlanDeControl clone = (PlanDeControl) super.clone();
             // TODO: copy mutable state here, so the clone can't change the internals of the original

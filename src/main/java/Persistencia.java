@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Persistencia {
+public class Persistencia { ///clase generica para persistencia y despersistencia, utilizando JSON, Jackson.
 
-    public static <s, t> void serializeHashMap(HashMap<s, t> hashMap, String path) { ///o string path
+    public static <s, t> void serializeHashMap(HashMap<s, t> hashMap, String path) {
         File file = new File(path);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -20,7 +20,7 @@ public class Persistencia {
         }
     }
 
-    public static <t> void serializeArrayList(ArrayList<t> arrayList, String path) { ///o string path
+    public static <t> void serializeArrayList(ArrayList<t> arrayList, String path) {
         File file = new File(path);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -30,7 +30,7 @@ public class Persistencia {
         }
     }
 
-    public static <s, t> HashMap<s, t> DEserializeHashMap(String path, Class<s> elementKey, Class<t> elementValue) { ///ver si anda esto
+    public static <s, t> HashMap<s, t> DEserializeHashMap(String path, Class<s> elementKey, Class<t> elementValue) {
         File file = new File(path);
         ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         HashMap<s, t> ret = new HashMap<>();

@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Usuario {
     protected String nombreCompleto;
     protected TipoUsuario tipoUsuario;
@@ -68,5 +70,16 @@ public class Usuario {
         return contrasena;
     }
 
+    @Override
+    public boolean equals(Object o) {///para funciones de Collections set
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(DNI, usuario.DNI);
+    }
 
+    @Override
+    public int hashCode() { ///para funciones de Collections set
+        return Objects.hash(DNI);
+    }
 }

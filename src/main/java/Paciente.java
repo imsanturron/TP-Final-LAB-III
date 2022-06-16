@@ -40,7 +40,7 @@ public class Paciente extends Usuario {
         this.enfermedad = enfermedad;
     }
 
-    public void persistirDia() {
+    public void persistirDia() { ///guarda los datos de x dia en arreglo
         PlanDeControl cloned = (PlanDeControl) planDeControl.clone();
         historialMedico.add(cloned);
     }
