@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class LocalDateDeserializer extends StdDeserializer<LocalDate> {
+public class LocalDateDeserializer extends StdDeserializer<LocalDate> {///clase para la correcta deserializacion del LocalDate
 
     protected LocalDateDeserializer() {
         super(LocalDate.class);

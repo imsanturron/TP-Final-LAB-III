@@ -361,7 +361,7 @@ public class Profesional extends Usuario implements CrearTratamiento {
         pacientesAAtender.remove(listaConver.get(0));
     }
 
-    public void sugerirAdminPlan(HashMap<String, Administrador> admins) {
+    public void sugerirAdminPlan(HashMap<String, Administrador> admins) { ///profesional NO puede predeterminar un plan
         String dni;
         char seguir = 's';
         while (seguir == 's' || seguir == 'S') {

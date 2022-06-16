@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = RTexto.class, name = "RTexto"),
         @JsonSubTypes.Type(value = RMulChoice.class, name = "RMulChoice")
 })
-public class Realizar {
+public class Realizar { ///clase padre de los tipos de inputs para diferentes acciones
     protected String accion = "";
     protected String msjEspecifico = "";
     protected boolean hecho = false;

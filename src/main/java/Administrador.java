@@ -158,7 +158,7 @@ public class Administrador extends Usuario implements CrearTratamiento {
             System.out.println("Paciente no hallado en el sistema");
     }
 
-    public Profesional asignarProfesional(HashMap<String, Profesional> profesionales) {
+    public Profesional asignarProfesional(HashMap<String, Profesional> profesionales) {///asignar medico a un paciente
         String masterkey = "";
         int comparador = 99;
 

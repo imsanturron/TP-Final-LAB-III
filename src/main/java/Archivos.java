@@ -1,4 +1,4 @@
-public enum Archivos {
+public enum Archivos {///Cambiar ruta dependiendo del directorio donde se guarde el proyecto
     PACIENTESALL("D:\\Escritorio\\san\\TUP\\intelliJ\\tp post REINSTALL\\tplab3reinstalllll\\pacientes.json"),
     PROFESIONALESALL("D:\\Escritorio\\san\\TUP\\intelliJ\\tp post REINSTALL\\tplab3reinstalllll\\profesionales.json"),
     ADMINISTRADORESALL("D:\\Escritorio\\san\\TUP\\intelliJ\\tp post REINSTALL\\tplab3reinstalllll\\administradores.json"),
